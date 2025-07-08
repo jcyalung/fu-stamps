@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+// for sending an email verification message
+// import crypto from 'crypto';
+// import { sendVerificationEmail } from '@/app/lib/sendEmail';
 
 export async function POST(request: Request) {
     try {
@@ -16,10 +19,12 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Not a UCI affiliated email" }, { status: 400 });
         }
 
-        // Send Verification Email
-            // Create verification token & expiration
-            // use sendVerificationEmail example?
-
+        // Send Verification Email: (use verification-email example?)
+        // Create verification token & expiration
+        // const token = crypto.randomBytes(32).toString('hex');
+        // const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
+        // from sendEmail
+        // await sendVerificationEmail(email, verificationUrl);
 
         // Send Success Response
         return NextResponse.json({ message: "Verification email was sent.", email, password } , { status: 200 });
