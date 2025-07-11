@@ -7,7 +7,9 @@ export async function POST(request: Request) {
     try {
         // Recieve the email and password of the user
         const { email, password } = await request.json();
-
+        if(password === "") {
+            return NextResponse.json({ error: "Invalid password" }, { status : 400 });
+        }
         // Check valid email format using regex
         const emailRegex = /^[a-zA-Z0-9._%+-]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (!emailRegex.test(email)) {
