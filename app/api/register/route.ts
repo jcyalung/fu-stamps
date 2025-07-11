@@ -9,7 +9,7 @@ export async function POST(request: Request) {
         const { email, password } = await request.json();
 
         // Check valid email format using regex
-        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@([\w-]+\.)+[\w-]{2,4}$/g;
         if (!emailRegex.test(email)) {
             return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
         }
