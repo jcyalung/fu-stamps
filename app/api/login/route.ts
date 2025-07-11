@@ -11,9 +11,9 @@ export async function POST(request: Request) {
 
         //regex for email validation
         const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.(com|edu|gov)$/;
-
+                
         if (!emailRegex.test(email)) {
-            return NextResponse.json({ message: "Invalid email" }, { status: 500 });
+            return NextResponse.json({ message: "Email format invalid" }, { status: 500 });
         }
 
         // sample data login
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
             },
         });
     }
-    catch (error: unknown) {
-        return NextResponse.json({message: 'a'}, {status : 500})
+    catch (error: any) {
+        return NextResponse.json({message: error.message}, {status : 500})
     }
 }
