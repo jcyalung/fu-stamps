@@ -1,37 +1,65 @@
 import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 import { sign } from "jsonwebtoken";
+import { createClient } from '@supabase/supabase-js';
 
 const MAX_AGE = 60*60*24*7; // max age set for 7 days
+
+const supabase = createClient(
+    process.env.SUPABASE_URL || "",
+    process.env.SUPABASE_ANON_KEY || ""
+);
 
 export async function POST(request: Request) {
     try {
         // getting the request body and storing the values in variables
-        const { email, password, verification, user_id } = await request.json();
+        const { email, password } = await request.json();
 
         //regex for email validation
         const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.(com|edu|gov)$/;
-                
+
+        //regex for password validation
+        // [\x00-\x7F] only ascii characters
+        // + ensures one character
+        const passRegex = /^[\x21-\x7E]+$/;
+
         if (!emailRegex.test(email)) {
-            return NextResponse.json({ message: "Email format invalid" }, { status: 500 });
+            return NextResponse.json({ message: "Email format invalid" }, { status: 400 });
         }
 
-        // sample data login
-        if ( email !== "admin@gmail.com" ) {
-            return NextResponse.json({ message: "Invalid email" }, { status: 404 });
+        if (!passRegex.test(password) || password.length < 1) {
+            return NextResponse.json({ message: "Password format invalid" }, { status: 400 });
         }
-        else if ( password !== "password" ) {
+        
+        //querying the database to check if the user exists
+        const table = await supabase.from('users');
+        const { data, error } = await table.select('email, password, verification, id').eq('email', email);
+        if(error) { throw Error(error.message); }
+
+        const user = data?.[0] || null;
+
+        if(!user) {
+            return NextResponse.json({ message: "Account does not exist"}, { status: 404});
+        }
+
+        // otherwise we will store the user's verification and id
+        const { verification, id } = user!; // the ! operator bypasses typescript errors
+
+        // check if the user is verified
+        if ( user!.verification == 0 ) {
+            return NextResponse.json({ message: "User is not verified" }, { status: 403 });
+        }
+        // check if the password matches
+        if ( user!.password !== password ) {
             return NextResponse.json({ message: "Invalid password" }, { status: 401 });
-        }
-        else if ( verification !== 2 ) {
-            return NextResponse.json({ message: "User is not verified" }, { status: 500 });
         }
         
         const secret = process.env.JWT_SECRET || "";
 
         // generate json web token signed by secret
         const token = sign(
-            { email, user_id },
+            // we need to pass their verification status 
+            { email, verification, id },
             secret,
             { expiresIn: MAX_AGE }
         );
@@ -45,7 +73,7 @@ export async function POST(request: Request) {
         });
 
         const response = {
-            message: "Login successful",
+            message: `Successfully logged in ${email}`,
         }
 
         return new Response(JSON.stringify(response), {
