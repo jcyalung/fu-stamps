@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
       { message: `Stamp added: ${stamp}, ${currentDate}` },
       { status: 200 }
     );
-  } catch (error: unknown) {
+  } catch (error: any) {
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
