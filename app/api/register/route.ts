@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 // import { sendVerificationEmail } from '@/app/lib/sendEmail';
 
 // Start the supabase client
-const supabase = createClient( process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
 
 // Function returns if inserting the data was successfull, otherwise includes the error message
 export async function registerUser( email: string, password: string): Promise<{ success: boolean; error?: string }> {
@@ -15,7 +15,7 @@ export async function registerUser( email: string, password: string): Promise<{ 
             {
                 email: email,
                 password: password,
-                verified: false,
+                verification: 0,
                 date_registered: new Date().toISOString().slice(0,10),
             },
         ])
@@ -46,9 +46,9 @@ export async function POST(request: Request) {
         }
 
         // Check password (no empty password, only unicode chars, no whitespace)
-        const isUnicode = /[^\u0000-\u00ff]/;
+        const isUnicode = /[^\u0021-\u007e]+$/;
         const hasWhitespace = /\s/;
-        if (password === "" || hasWhitespace.test(password) || !isUnicode.test(password)) {
+        if (password === "" || hasWhitespace.test(password) || isUnicode.test(password)) {
             return NextResponse.json({ error: "Invalid password" }, { status : 400 });
         }
 
@@ -87,8 +87,8 @@ export async function POST(request: Request) {
         // await sendVerificationEmail(email, verificationUrl);
         
     // Catch any other errors
-    } catch (error) {
-        return NextResponse.json({ error: "An error occurred while registering." }, { status: 500 });
+    } catch (error : any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
     
 }
