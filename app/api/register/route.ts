@@ -7,6 +7,28 @@ import { createClient } from '@supabase/supabase-js';
 // Start the supabase client
 const supabase = createClient( process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
+// Function returns if inserting the data was successfull, otherwise includes the error message
+export async function registerUser( email: string, password: string): Promise<{ success: boolean; error?: string }> {
+    const { data, error } = await supabase
+        .from('users')
+        .insert([
+            {
+                email: email,
+                password: password,
+                verified: false,
+                date_registered: new Date().toISOString().slice(0,10),
+            },
+        ])
+        .select();
+  
+    if (error) {
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
+  }
+
+
 export async function POST(request: Request) {
     try {
         // Recieve the email and password of the user
@@ -45,16 +67,17 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: `User with email ${email} already exists` }, { status : 409 });
         }
         
-        // try:
-        // Update the users table in the database:
-        // id (automatic), email, password, verification (initial: 0), date_registered (2025-07-13)
+        // Register the user
+        const reg = await registerUser(email, password);
         
-        // catch
-        // 500 other unknown database error
+        // Catch error from inserting into the database
+        if (!reg.success) { throw Error(reg.error) }
         
         // Send Success Response
-        return NextResponse.json({ message: "Verification email was sent.", email, password } , { status: 200 });
-    
+        if (reg.success) {
+            return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
+        }
+
         // Part 3
         // Send Verification Email: (use verification-email example?)
         // Create verification token & expiration
