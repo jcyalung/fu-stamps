@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { createClient } from '@supabase/supabase-js';
 // for sending an email verification message
 // import crypto from 'crypto';
 // import { sendVerificationEmail } from '@/app/lib/sendEmail';
+
+// Start the supabase client
+const supabase = createClient( process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
 export async function POST(request: Request) {
     try {
