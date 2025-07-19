@@ -73,7 +73,7 @@ export async function POST(request: Request) {
         // Catch error from inserting into the database
         if (!reg.success) { throw Error(reg.error) }
         
-        // Send Success Response
+        // Send success response
         if (reg.success) {
             return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
         }
