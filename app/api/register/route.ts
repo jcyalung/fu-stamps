@@ -26,8 +26,20 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Invalid password" }, { status : 400 });
         }
 
-        // check duplicate emails
-        // 409 user with email already exists !! use query option to look through emails
+        // Check duplicate emails
+        const { data, error } = await supabase
+            .from('users')
+            .select('email')
+            .eq('email', email)
+            .maybeSingle();
+        
+        // Catch error from querying database
+        if (error) { throw Error(error.message) }
+        
+        // If there is matching data, the email already exists and won't registered
+        if (data) {
+            return NextResponse.json({ error: `User with email ${email} already exists` }, { status : 409 });
+        }
         
         // try:
         // Update the users table in the database:
