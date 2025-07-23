@@ -2,7 +2,7 @@ import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 import { sign } from "jsonwebtoken";
 import { createClient } from '@supabase/supabase-js';
-
+import { COOKIE_NAME } from '@/constants';
 const MAX_AGE = 60*60*24*7; // max age set for 7 days
 
 const supabase = createClient(
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
             { expiresIn: MAX_AGE }
         );
 
-        const serialized = serialize("token", token, {
+        const serialized = serialize(COOKIE_NAME, token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
