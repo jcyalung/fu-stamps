@@ -3,9 +3,11 @@ import { createClient } from '@supabase/supabase-js';  // for supabase
 import crypto from 'crypto';  // for generating a random token
 import nodemailer from 'nodemailer';  // for sending verification email
 
+
 // Define constants for supabase client and verification link
 const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
 const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
+
 
 // registerUser returns if inserting the data was successfull, otherwise includes the error message
 async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any , error?: string }> {
@@ -40,7 +42,7 @@ async function sendVerificationEmail(to: string, link: string) {
             pass: process.env.TEST_PASSWORD,
         },
     });
-  
+
     await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: to,
@@ -62,7 +64,7 @@ async function updateVerificationCodes(user_id: number, code: string, experiatio
             },
         ])
         .select();
-  
+
     if (error) {
       return { success: false, error: error.message }
     }
@@ -103,18 +105,18 @@ export async function POST(request: Request) {
 
         // Throw error from querying database for copies
         if (error) { throw Error(error.message) }
-        
+
         // If there is matching data, the email already exists and won't registered
         if (data) {
             return NextResponse.json({ error: `User with email ${email} already exists` }, { status : 409 });
         }
-        
+
         // Register the user
         const reg = await registerUser(email, password);
-        
+
         // Throw error from inserting into the database
         if (!reg.success) { throw Error(reg.error) };
-                
+
         // Set up verification token, experiation, and user
         const token = crypto.randomBytes(32).toString('hex');
         const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
@@ -137,5 +139,5 @@ export async function POST(request: Request) {
     } catch (error : any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    
+
 }
