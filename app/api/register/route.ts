@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
-import { createClient } from '@supabase/supabase-js';
-// for sending an email verification message
-// import crypto from 'crypto';
-// import { sendVerificationEmail } from '@/app/lib/sendEmail';
+import { createClient } from '@supabase/supabase-js';  // for supabase
+import crypto from 'crypto';  // for generating a random token
+import nodemailer from 'nodemailer';  // for sending verification email
 
 // Start the supabase client
 const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
 
-// Function returns if inserting the data was successfull, otherwise includes the error message
-export async function registerUser( email: string, password: string): Promise<{ success: boolean; error?: string }> {
+// registerUser returns if inserting the data was successfull, otherwise includes the error message
+async function registerUser( email: string, password: string): Promise<{ success: boolean; error?: string }> {
     const { data, error } = await supabase
         .from('users')
         .insert([
@@ -16,17 +15,17 @@ export async function registerUser( email: string, password: string): Promise<{ 
                 email: email,
                 password: password,
                 verification: 0,
-                date_registered: new Date().toISOString().slice(0,10),
+                date_registered: new Date().toISOString().slice(0,10), // date in form MM-DD-YYYY
             },
         ])
         .select();
-  
+
     if (error) {
       return { success: false, error: error.message }
     }
 
     return { success: true }
-  }
+}
 
 
 export async function POST(request: Request) {
