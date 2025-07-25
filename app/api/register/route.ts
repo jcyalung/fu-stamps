@@ -115,9 +115,16 @@ export async function POST(request: Request) {
         // Throw error from inserting into the database
         if (!reg.success) { throw Error(reg.error) };
                 
-        // Create verification token & expiration
+        // Set up verification token, experiation, and user
         const token = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
+        const user = reg.data?.[0];
 
+        // Update verification_codes table
+        const verify_codes = await updateVerificationCodes(user.id, token, expires);
+        if (!verify_codes.success) { throw Error(`Unable to insert verification code`) };
+
+        // Send the verification email with the token
         const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
         await sendVerificationEmail(email, verificationUrl);
 
@@ -128,7 +135,8 @@ export async function POST(request: Request) {
 
         // Update verification_codes table
         const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
-        const verify_codes = await updateVerificationCodes(reg.data.user_id, token, expires);
+        const user = reg.data?.[0];
+        const verify_codes = await updateVerificationCodes(user.id, token, expires);
 
         // Throw error if the verification code couldn't be inserted into the table
         if (!verify_codes.success) { throw Error(`Unable to insert verification code`) };
