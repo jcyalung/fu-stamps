@@ -87,10 +87,10 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Not a UCI affiliated email" }, { status: 400 });
         }
 
-        // Check password (no empty password, only unicode chars, no whitespace)
-        const isUnicode = /[^\u0021-\u007e]+$/;
+        // Check password (no blank password, only ascii chars, no whitespace)
+        const isASCII = /[^\u0021-\u007e]+$/;
         const hasWhitespace = /\s/;
-        if (password === "" || hasWhitespace.test(password) || isUnicode.test(password)) {
+        if (password === "" || hasWhitespace.test(password) || isASCII.test(password)) {
             return NextResponse.json({ error: "Invalid password" }, { status : 400 });
         }
 
@@ -132,14 +132,6 @@ export async function POST(request: Request) {
         if (reg.success) {
             return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
         }
-
-        // Update verification_codes table
-        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
-        const user = reg.data?.[0];
-        const verify_codes = await updateVerificationCodes(user.id, token, expires);
-
-        // Throw error if the verification code couldn't be inserted into the table
-        if (!verify_codes.success) { throw Error(`Unable to insert verification code`) };
 
     // Catch any other errors
     } catch (error : any) {
