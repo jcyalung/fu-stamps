@@ -7,7 +7,7 @@ import nodemailer from 'nodemailer';  // for sending verification email
 const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
 
 // registerUser returns if inserting the data was successfull, otherwise includes the error message
-async function registerUser( email: string, password: string): Promise<{ success: boolean; error?: string }> {
+async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any , error?: string }> {
     const { data, error } = await supabase
         .from('users')
         .insert([
@@ -24,7 +24,29 @@ async function registerUser( email: string, password: string): Promise<{ success
       return { success: false, error: error.message }
     }
 
-    return { success: true }
+    return { success: true, data }
+}
+
+
+// sendVerificationEmail uses nodemailer to send a verification email to the new user
+const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
+async function sendVerificationEmail(to: string, link: string) {
+    const EMAIL_LINK = VERIFICATION_URL + "?code=" + "generated-code-here";
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.TEST_EMAIL,
+            pass: process.env.TEST_PASSWORD,
+        },
+    });
+  
+    await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: to,
+        subject: 'Verify your email',
+        html: `<p>Click <a href="${EMAIL_LINK}">here</a> to verify your email.</p>`,
+    });
 }
 
 
@@ -57,8 +79,8 @@ export async function POST(request: Request) {
             .select('email')
             .eq('email', email)
             .maybeSingle();
-        
-        // Catch error from querying database
+
+        // Throw error from querying database for copies
         if (error) { throw Error(error.message) }
         
         // If there is matching data, the email already exists and won't registered
@@ -69,9 +91,15 @@ export async function POST(request: Request) {
         // Register the user
         const reg = await registerUser(email, password);
         
-        // Catch error from inserting into the database
-        if (!reg.success) { throw Error(reg.error) }
-        
+        // Throw error from inserting into the database
+        if (!reg.success) { throw Error(reg.error) };
+                
+        // Create verification token & expiration
+        const token = crypto.randomBytes(32).toString('hex');
+
+        const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
+        await sendVerificationEmail(email, verificationUrl);
+
         // Send success response
         if (reg.success) {
             return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
