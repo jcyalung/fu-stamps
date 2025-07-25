@@ -3,8 +3,9 @@ import { createClient } from '@supabase/supabase-js';  // for supabase
 import crypto from 'crypto';  // for generating a random token
 import nodemailer from 'nodemailer';  // for sending verification email
 
-// Start the supabase client
+// Define constants for supabase client and verification link
 const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
+const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
 
 // registerUser returns if inserting the data was successfull, otherwise includes the error message
 async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any , error?: string }> {
@@ -29,7 +30,6 @@ async function registerUser(email: string, password: string): Promise<{ success:
 
 
 // sendVerificationEmail uses nodemailer to send a verification email to the new user
-const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
 async function sendVerificationEmail(to: string, link: string) {
     const EMAIL_LINK = VERIFICATION_URL + "?code=" + "generated-code-here";
 
