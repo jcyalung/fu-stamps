@@ -50,6 +50,27 @@ async function sendVerificationEmail(to: string, link: string) {
 }
 
 
+// updateVerificationCodes updates with new user data in verification_codes table
+async function updateVerificationCodes(user_id: number, code: string, experiation_date: string): Promise<{ success: boolean; error?: string }> {
+    const { data, error } = await supabase
+        .from('verification-codes')
+        .insert([
+            {
+                user_id: user_id,
+                code: code,
+                expires: experiation_date,
+            },
+        ])
+        .select();
+  
+    if (error) {
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
+}
+
+
 export async function POST(request: Request) {
     try {
         // Recieve the email and password of the user
@@ -105,14 +126,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
         }
 
-        // Part 3
-        // Send Verification Email: (use verification-email example?)
-        // Create verification token & expiration
-        // const token = crypto.randomBytes(32).toString('hex');
-        // const verificationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}`;
-        // from sendEmail
-        // await sendVerificationEmail(email, verificationUrl);
-        
+        // Update verification_codes table
+        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
+        const verify_codes = await updateVerificationCodes(reg.data.user_id, token, expires);
+
+        // Throw error if the verification code couldn't be inserted into the table
+        if (!verify_codes.success) { throw Error(`Unable to insert verification code`) };
+
     // Catch any other errors
     } catch (error : any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
