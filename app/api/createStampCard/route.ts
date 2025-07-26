@@ -31,25 +31,25 @@ export async function GET(request: Request) {
         }
 
         // get user id and verify it exists
-        const user_id = payload.user_id;
-        const email = payload.email || 'unknown';
+        const user_id = (payload as any).user_id;
+        const email = (payload as any).email || 'unknown';
 
         if (!user_id) {
             return NextResponse.json({ message: "Invalid User ID" }, { status: 400 });
         }
 
         // get data from supabase
-        const table = await supabase.from('stamp_card');
+        const table = await supabase.from('stamp-card');
         const { data, error } = await table.select('num_stamps').eq('user_id', user_id);
         if (error) { throw new Error(error.message);}
 
         //check if any stamps do not have exactly 10 stamps
-        if ( data.some(stamp => stamp.num_stamps == 10) ) {
+        if ( data.some(stamp => stamp.num_stamps !== 10) ) {
             return NextResponse.json({ message: "You do not have 10 stamps on all cards" }, { status: 409 });
         }
 
         //create a new stamp card for the user
-        const { error: insertError } = await supabase.from("stamp_card").insert({ user_id });
+        const { error: insertError } = await supabase.from("stamp-card").insert({ user_id });
 
         if (insertError) {
             throw new Error(insertError.message);
