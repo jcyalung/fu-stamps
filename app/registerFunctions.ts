@@ -87,7 +87,7 @@ export async function sendVerificationEmail(to: string, link: string) {
         from: process.env.EMAIL_USER,
         to: to,
         subject: 'Verify your email',
-        html: `<p>Click <a href="${EMAIL_LINK}">here</a> to verify your email.</p>`,
+        html: `<p>Thank you for registering for Fu-Stamps! Click <a href="${EMAIL_LINK}">here</a> to verify your email.</p>`,
     });
 }
 

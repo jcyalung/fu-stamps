@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from 'crypto';  // for generating a random token
-import { validateEmailPassword, registerUser, updateVerificationCodes, sendVerificationEmail } from '@/app/registerFunctions;
+import { validateEmailPassword, registerUser, updateVerificationCodes, sendVerificationEmail } from '@/app/registerFunctions';
 
 
 // Registers a new user
