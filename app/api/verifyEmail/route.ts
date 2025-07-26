@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_ANON_KEY!
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_ANON_KEY || "",
 );
 
 // header function
@@ -31,7 +31,10 @@ export async function POST(request: Request) {
     }
 
     // checks if code expired
-    if (new Date(codeEntry.expires) < new Date()) {
+    const expiry = new Date(codeEntry.expires).toISOString().slice(0,10);
+    const current = new Date().toISOString().slice(0,10);
+
+    if (expiry < current) {
       return new Response(
         JSON.stringify({ error: 'Verification code expired' }), {status: 401}
       );
