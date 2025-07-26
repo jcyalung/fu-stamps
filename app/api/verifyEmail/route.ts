@@ -59,9 +59,9 @@ export async function POST(request: Request) {
     return new Response(
       JSON.stringify({message: `Verified user ${updatedUser.email}!`}), {status: 200}
     );
-  } catch (err) {
+  } catch (err : any) {
     return new Response(
-      JSON.stringify({error: 'Server error'}), {status: 500}
+      JSON.stringify({error: err}), {status: 500}
     );
   }
 }
