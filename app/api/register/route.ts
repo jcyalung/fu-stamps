@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
         // Set up verification token, experiation, and user
         const token = crypto.randomBytes(32).toString('hex');
-        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(); // 24 hours after current date
+        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0,10); // 24 hours after current date
         const user = reg.data?.[0];
 
         // Update verification_codes table

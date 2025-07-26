@@ -57,7 +57,7 @@ export async function registerUser(email: string, password: string): Promise<{ s
                 email: email,
                 password: password,
                 verification: 0,
-                date_registered: new Date().toISOString().slice(0,10), // date in form MM-DD-YYYY
+                date_registered: new Date().toISOString().slice(0,10), // date in form YYYY-MM-DD
             },
         ])
         .select();
