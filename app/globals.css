@@ -1,4 +1,41 @@
 @import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "fusion";
+  default: false;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #FFFFFF;
+  --color-base-200: #FFFBEF;
+  --color-base-300: #FFFBEF;
+  --color-base-content: #000000;
+  --color-primary: #FBCA29;
+  --color-primary-content: oklch(98% 0.019 200.873);
+  --color-secondary: #747474;
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: #000000;
+  --color-accent-content: oklch(97% 0.013 17.38);
+  --color-neutral: oklch(27% 0.041 260.031);
+  --color-neutral-content: oklch(98% 0.003 247.858);
+  --color-info: oklch(78% 0.154 211.53);
+  --color-info-content: oklch(30% 0.056 229.695);
+  --color-success: oklch(77% 0.152 181.912);
+  --color-success-content: oklch(27% 0.046 192.524);
+  --color-warning: oklch(75% 0.183 55.934);
+  --color-warning-content: oklch(26% 0.079 36.259);
+  --color-error: oklch(71% 0.194 13.428);
+  --color-error-content: oklch(27% 0.105 12.094);
+  --radius-selector: 0rem;
+  --radius-field: 0.25rem;
+  --radius-box: 2rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
 
 :root {
   --background: #ffffff;
