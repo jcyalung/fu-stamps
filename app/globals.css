@@ -14,8 +14,11 @@
 }
 
 @theme {
+  --color-darkgrey: #747474;
+  --color-yellowunderline: #FBCA29;
   --color-lightyellow: #FFFBEF;
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
