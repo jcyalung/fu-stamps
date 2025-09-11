@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.50.5",
     "axios": "^1.10.0",
     "cookie": "^1.0.2",
+    "daisyui": "^5.0.50",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.4",
     "nodemailer": "^7.0.5",
