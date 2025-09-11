@@ -75,12 +75,12 @@ export default async function handler(
       .eq('id', validCard.id);
 
     if (deleteError) {
-      return res.status(500).json
+      throw new Error(deleteError.message); // catch this error
     }
 
     return res.status(200).json({ success: true });
 
-  } catch (err) {
-    return res.status(500).json
+  } catch (err : any) {
+    return res.status(500).json({error: err})
   }
 }
