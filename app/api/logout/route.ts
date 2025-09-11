@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       );
     }
 
-    let email = "user";//fallback
+    let email = "user"; //fallback
 
     try {
       const decoded: any = verify(token, secret);
@@ -42,9 +42,11 @@ export async function GET(request: Request) {
         sameSite: "strict", 
         maxAge: -1,
         path: "/",  
-});
-
+    });
+    
     return response;
+
+
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "An unknown error occurred" },
