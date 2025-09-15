@@ -7,8 +7,7 @@ interface TitleTextboxProps {
 
 const TitleTextbox: React.FC<TitleTextboxProps> = ({ children, className = "" }) => {
     return (
-    <div 
-    style={{
+    <div style={{
       display: 'inline-flex',
       padding: '4px 80px',
       justifyContent: 'flex-end',
@@ -21,8 +20,7 @@ const TitleTextbox: React.FC<TitleTextboxProps> = ({ children, className = "" })
       }}
     >
       {/* text within the title box */}
-      <div 
-      style={{
+      <div style={{
         textAlign: 'center',
         color: 'white',
         WebkitTextStroke: '1px black',
