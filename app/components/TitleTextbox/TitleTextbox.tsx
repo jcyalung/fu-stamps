@@ -20,7 +20,19 @@ const TitleTextbox: React.FC<TitleTextboxProps> = ({ children, className = "" })
       boxShadow: '4px 6px 0 0 #000000'
       }}
     >
-      <div className="text-center text-white text-6xl font-bold font-['Jost'] tracking-[3.20px]">
+      {/* text within the title box */}
+      <div 
+      style={{
+        textAlign: 'center',
+        color: 'white',
+        WebkitTextStroke: '1px black',
+        fontSize: '48px', // original font size was 64
+        fontFamily: "Jost, monospace", 
+        fontWeight: 'bold',
+        letterSpacing: '3.20', 
+        wordWrap: 'break-word'
+      }}
+      >
         {children}
       </div>
     </div>
