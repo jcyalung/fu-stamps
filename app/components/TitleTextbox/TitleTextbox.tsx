@@ -25,8 +25,8 @@ const TitleTextbox: React.FC<TitleTextboxProps> = ({ children, className = "" })
         color: 'white',
         WebkitTextStroke: '1px black',
         fontSize: '48px', // original font size was 64
-        fontFamily: "Jost, monospace", 
-        fontWeight: 'bold',
+        fontFamily: 'Verdana, monospace', 
+        fontWeight: '1000',
         letterSpacing: '3.20', 
         wordWrap: 'break-word'
       }}
