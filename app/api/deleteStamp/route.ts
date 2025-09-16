@@ -2,17 +2,16 @@ import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { parse } from 'cookie';
+import { NextResponse } from 'next/server';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || "",
   process.env.SUPABASE_ANON_KEY || ""
 );
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'GET') {
+export async function POST(request: Request) {
+  return NextResponse.json({ message: "in progress"}, {status: 401});
+  /*if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -82,5 +81,5 @@ export default async function handler(
 
   } catch (err : any) {
     return res.status(500).json({error: err})
-  }
+  } */
 }
