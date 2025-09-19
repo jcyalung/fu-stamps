@@ -1,4 +1,4 @@
-import TitleTextbox from "../components/TitleTextbox/TitleTextbox";
+import TitleTextbox from "@/components/TitleTextbox";
 
 export default function AboutPage() {
   return (
