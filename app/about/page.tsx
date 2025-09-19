@@ -10,7 +10,6 @@ export default function AboutPage() {
       padding: '80px',
       }}
     >
-      
       <TitleTextbox>
         ABOUT FU-STAMPS
       </TitleTextbox>
