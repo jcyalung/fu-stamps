@@ -27,6 +27,7 @@
     "@types/nodemailer": "^7.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "daisyui": "^5.0.50",
     "tailwindcss": "^4.1.12",
     "typescript": "^5"
   }
