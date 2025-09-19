@@ -7,10 +7,30 @@ interface TitleTextboxProps {
 
 const TitleTextbox: React.FC<TitleTextboxProps> = ({ children, className = "" }) => {
     return (
-    <div
-      className={`px-20 py-1 bg-amber-400 shadow-[4px_6px_0px_0px_rgba(0,0,0,1)] outline outline-offset-[-1px] outline-black inline-flex justify-end items-center overflow-hidden ${className}`}
+    <div style={{
+      display: 'inline-flex',
+      padding: '4px 80px',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+      margin: '60px', // temporary while other items aren't on page
+      
+      border: '1px solid #000000',
+      backgroundColor: '#FBCA29',
+      boxShadow: '4px 6px 0 0 #000000'
+      }}
     >
-      <div className="text-center text-white text-6xl font-bold font-['Jost'] tracking-[3.20px]">
+      {/* text within the title box */}
+      <div style={{
+        textAlign: 'center',
+        color: 'white',
+        WebkitTextStroke: '1px black',
+        fontSize: '48px', // original font size was 64
+        fontFamily: 'Verdana, monospace', 
+        fontWeight: '1000',
+        letterSpacing: '3.20', 
+        wordWrap: 'break-word'
+      }}
+      >
         {children}
       </div>
     </div>
