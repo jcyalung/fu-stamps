@@ -23,13 +23,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  //placeholder for the backend logic
+  
   return (
-    <html lang="en" suppressHydrationWarning >
-      <GuestHeader/>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header>
+          <GuestHeader />
+        </header>
+
         {children}
+
+        <footer>placeholder for footer </footer>
       </body>
     </html>
   );
