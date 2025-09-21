@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
-import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
-import { parse } from 'cookie';
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { COOKIE_NAME } from '@/constants';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || "",
@@ -10,18 +10,17 @@ const supabase = createClient(
 );
 
 export async function POST(request: Request) {
-  return NextResponse.json({ message: "in progress"}, {status: 401});
-  /*if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
   try {
     // parses cookies
-    const cookies = parse(req.headers.cookie || '');
-    const token = cookies.SiteSessionJWT;
+    const cookieStore = await cookies();
+    const token = cookieStore.get(COOKIE_NAME);
 
     if (!token) {
-      return res.status(500).json
+      return NextResponse.json({
+        status_code: 400,
+        error: 'No session found',
+        user: {}
+      }, { status: 400 });
     }
 
     // verifies the JWT
@@ -29,7 +28,11 @@ export async function POST(request: Request) {
     try {
       decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET || '');
     } catch {
-      return res.status(500).json
+      return NextResponse.json({
+        status_code: 400,
+        error: 'Invalid or expired session',
+        user: {}
+      }, { status: 400 });
     }
 
     const user_id = decoded.sub;
@@ -43,7 +46,11 @@ export async function POST(request: Request) {
 
     // error handling if user is not found
     if (userError || !user) {
-      return res.status(404).json({ error: 'User not found' });
+      return NextResponse.json({
+        status_code: 400,
+        error: 'User not found',
+        user: {}
+      }, { status: 400 });
     }
 
     // retrieves stamp cards with num_stamps value of 10
@@ -55,16 +62,24 @@ export async function POST(request: Request) {
       .order('created_at', { ascending: false });
 
     if (stampCardError) {
-      return res.status(500).json({ error: 'Failed to fetch stamp cards' });
-    }
+      return NextResponse.json({
+        status_code: 500,
+        error: 'Failed to fetch stamp cards',
+        user: {}
+      }, { status: 500 });
+    } // REMOVED the extra closing brace here
 
-    // finds cards where stanp length is 10
+    // finds cards where stamp length is 10
     const validCard = stampCards?.find(
       card => Array.isArray(card.stamps) && card.stamps.length === 10
     );
 
     if (!validCard) {
-      return res.status(400).json({ error: 'No stamp cards follow the criteria' });
+      return NextResponse.json({
+        status_code: 400,
+        error: 'No stamp cards follow the criteria',
+        user: {}
+      }, { status: 400 });
     }
 
     // deletes the most recent valid card
@@ -74,12 +89,20 @@ export async function POST(request: Request) {
       .eq('id', validCard.id);
 
     if (deleteError) {
-      throw new Error(deleteError.message); // catch this error
+      return NextResponse.json({
+        status_code: 500,
+        error: 'Failed to delete stamp card',
+        user: {}
+      }, { status: 500 });
     }
 
-    return res.status(200).json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
 
-  } catch (err : any) {
-    return res.status(500).json({error: err})
-  } */
+  } catch (err) {
+    return NextResponse.json({
+      status_code: 500,
+      error: 'Internal server error',
+      user: {}
+    }, { status: 500 });
+  }
 }
