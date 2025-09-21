@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import jwt from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { COOKIE_NAME } from '@/constants';
@@ -22,11 +22,11 @@ export async function POST(request: Request) {
         user: {}
       }, { status: 400 });
     }
-
     // verifies the JWT
     let decoded: any;
     try {
-      decoded = jwt.verify(token, process.env.SUPABASE_JWT_SECRET || '');
+      const { value } = token;
+      decoded = verify(value, process.env.SUPABASE_JWT_SECRET || '');
     } catch {
       return NextResponse.json({
         status_code: 400,
