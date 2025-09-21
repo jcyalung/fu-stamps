@@ -1,19 +1,19 @@
 import { createClient } from '@supabase/supabase-js';
-import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
-import { parse } from 'cookie';
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { COOKIE_NAME } from '@/constants';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || "",
   process.env.SUPABASE_ANON_KEY || ""
 );
 
-export async function POST(request: NextApiRequest) {
+export async function POST(request: Request) {
   try {
     // parses cookies
-    const cookies = parse(request.headers.cookie || '');
-    const token = cookies.SiteSessionJWT;
+    const cookieStore = await cookies();
+    const token = cookieStore.get(COOKIE_NAME);
 
     if (!token) {
       return NextResponse.json({
