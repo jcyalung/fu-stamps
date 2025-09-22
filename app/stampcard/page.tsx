@@ -5,7 +5,7 @@ import Stampcard from "@/components/Stampcard";
 import type { StampType, StampProps } from "@/types/types";
 
 const stamp : StampType = {id:1, date:'mm-dd'};
-const stamps : StampProps = [stamp];
+const stamps : StampType[] = [stamp];
 export default function Home() {
 
   return (
