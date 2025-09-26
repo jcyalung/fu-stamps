@@ -9,8 +9,16 @@ const stamps : StampType[] = [stamp];
 export default function Home() {
 
   return (
-    <main>
-        <Stampcard stamps={stamps}/>
+    <main style={{
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: '#FFFBEF',
+      display: 'block',
+      padding: '80px',
+      }} >
+      
+      <Stampcard stamps={stamps}/>
+        
     </main>
   );
 }
