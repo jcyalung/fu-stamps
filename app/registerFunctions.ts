@@ -50,21 +50,19 @@ export async function validateEmailPassword(email: string, password: string): Pr
 
 // registerUser returns if inserting the data was successfull, otherwise includes the error message
 export async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any; error?: string }> {
-    const { data, error } = await supabase
-        .from('users')
-        .insert([
-            {
-                email: email,
-                password: password,
-                verification: 0,
-                date_registered: new Date().toISOString().slice(0,10), // date in form YYYY-MM-DD
-            },
-        ])
-        .select();
-
+    const { data, error } = await supabase.auth.signUp({email, password});
     if (error) {
       return { success: false, error: error.message }
     }
+    if (data) {
+        const result = await supabase.from('users').insert({
+            auth_id: data.user!.id, // Supabase UUID
+            email: data.user!.email,
+            verification: 0, // optional, if you want your own tracking
+        });
+        console.log(result);
+    }
+    
 
     return { success: true, data }
 }

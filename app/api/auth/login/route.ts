@@ -3,13 +3,25 @@ import { NextResponse } from 'next/server';
 import { sign } from "jsonwebtoken";
 import { createClient } from '@supabase/supabase-js';
 import { COOKIE_NAME, MAX_AGE } from '@/constants';
-import { supabase } from '@/components/supabaseClient';
+import { supabase } from '@/types/supabaseClient';
 
 
 export async function POST(request: Request) {
 
     try {
+        const { email, password } = await request.json();
 
+        const { data, error } = await supabase.auth.signInWithPassword({email, password});
+        console.log(data.session?.user.id);
+        if(error) {
+            console.log(error);
+            return NextResponse.json({error: "error occurred"}, {status: 500})
+        }
+        else {
+            return NextResponse.json({message: "success", data: data}, {status: 200});
+        }
+    } catch (error : any) {
+        return NextResponse.json({error:"an unknown error occurred"}, {status:500});
     }
     /* try {
         // getting the request body and storing the values in variables

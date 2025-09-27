@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { COOKIE_NAME } from "@/constants";
 import { verify } from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/components/supabaseClient";
+import { supabase } from "@/types/supabaseClient";
 
 /**
  * This is an endpoint for adding a new stamp to a stampcard

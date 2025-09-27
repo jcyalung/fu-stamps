@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { supabase } from '@/components/supabaseClient';
+import { supabase } from '@/types/supabaseClient';
 
 // header function
 export async function POST(request: Request) {

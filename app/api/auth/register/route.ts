@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     try {
         // Recieve the email and password of the user
         const { email, password } = await request.json();
-
+        
         // Validate the email and password
         const valid = await validateEmailPassword(email, password);
         if (!valid.success) {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
         // Throw error from inserting into the database
         if (!reg.success) { throw Error(reg.error) };
-
+        /*
         // Set up verification token, experiation, and user
         const token = crypto.randomBytes(32).toString('hex');
         const expires = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0,10); // 24 hours after current date
@@ -37,7 +37,8 @@ export async function POST(request: Request) {
         // Send success response
         if (reg.success) {
             return NextResponse.json({ message: `Verification email was sent to: ${email}` } , { status: 200 });
-        }
+        } */
+       return NextResponse.json({message: "success"}, {status: 200});
 
     // Catch any other errors
     } catch (error: any) {

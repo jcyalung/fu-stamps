@@ -3,7 +3,7 @@ import { verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { COOKIE_NAME } from "@/constants";
 import { NextResponse } from 'next/server';
-import { supabase } from '@/components/supabaseClient';
+import { supabase } from '@/types/supabaseClient';
 
 export async function GET(request: Request) {
     try {
