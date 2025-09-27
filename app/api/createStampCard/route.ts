@@ -3,11 +3,7 @@ import { verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { COOKIE_NAME } from "@/constants";
 import { NextResponse } from 'next/server';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL || "",
-  process.env.SUPABASE_ANON_KEY || ""
-);
+import { supabase } from '@/components/supabaseClient';
 
 export async function GET(request: Request) {
     try {

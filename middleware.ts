@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
 
     const rule = ROUTE_ACCESS.find((r) => r.pattern.test(pathname));
     if (rule && verification < rule.minLevel) {
-        return NextResponse.redirect(new URL('/', req.url));
+        return NextResponse.redirect(new URL('/unauthorized', req.url));
     }
     return NextResponse.next();
 }

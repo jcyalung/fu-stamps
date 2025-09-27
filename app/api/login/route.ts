@@ -2,16 +2,16 @@ import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 import { sign } from "jsonwebtoken";
 import { createClient } from '@supabase/supabase-js';
-import { COOKIE_NAME } from '@/constants';
-const MAX_AGE = 60*60*24*7; // max age set for 7 days
+import { COOKIE_NAME, MAX_AGE } from '@/constants';
+import { supabase } from '@/components/supabaseClient';
 
-const supabase = createClient(
-    process.env.SUPABASE_URL || "",
-    process.env.SUPABASE_ANON_KEY || ""
-);
 
 export async function POST(request: Request) {
+
     try {
+
+    }
+    /* try {
         // getting the request body and storing the values in variables
         const { email, password } = await request.json();
 
@@ -85,5 +85,5 @@ export async function POST(request: Request) {
     }
     catch (error: any) {
         return NextResponse.json({message: error.message}, {status : 500})
-    }
+    } */
 }
