@@ -5,11 +5,12 @@ import { COOKIE_NAME } from "@/constants";
 import { cookies } from 'next/headers'
 import { verify } from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import { GUESTROUTES } from "./routes";
+import { MEMBERROUTES } from "./routes";
 const montserrat = Montserrat({
     weight: ["400"],
     subsets: ["latin"],
 });
+
 
 
 export default async function GuestHeader() {
@@ -29,7 +30,7 @@ export default async function GuestHeader() {
                     </Link>
                 </div>
                 <div className="flex items-center text-darkgrey text-3xl gap-10">
-                    {Object.entries(GUESTROUTES).map(([key, value]) => (
+                    {Object.entries(MEMBERROUTES).map(([key, value]) => (
                         <Link key={value} href={key}> {value}</Link>
                     ))}
                 </div>

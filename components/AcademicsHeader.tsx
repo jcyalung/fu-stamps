@@ -5,14 +5,29 @@ import { COOKIE_NAME } from "@/constants";
 import { cookies } from 'next/headers'
 import { verify } from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import { GUESTROUTES } from "./routes";
+import { ACADEMICSROUTES  } from "./routes";
 const montserrat = Montserrat({
     weight: ["400"],
     subsets: ["latin"],
 });
 
+//get user_id from cooke
+export async function getUserFromCookie() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("SiteSessionJWT")?.value;
 
-export default async function GuestHeader() {
+  if (!token) return null;
+  const secret = process.env.JWT_SECRET || "";
+  try {
+    const decoded = verify(token, secret);
+    const user_id = (decoded as any).user_id;
+  } catch (e) {
+    return null;
+  }
+}
+
+
+export default async function AcademicsHeader() {
     return (
         <div className="fixed w-full h-[68px] bg-black">
             <div className={`flex justify-between items-center h-full px-4 ${montserrat.className}`}>
@@ -29,7 +44,7 @@ export default async function GuestHeader() {
                     </Link>
                 </div>
                 <div className="flex items-center text-darkgrey text-3xl gap-10">
-                    {Object.entries(GUESTROUTES).map(([key, value]) => (
+                    {Object.entries(ACADEMICSROUTES).map(([key, value]) => (
                         <Link key={value} href={key}> {value}</Link>
                     ))}
                 </div>

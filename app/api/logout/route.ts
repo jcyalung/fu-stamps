@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { verify } from "jsonwebtoken";
+import { COOKIE_NAME } from "@/constants";
 
-const COOKIE_NAME = "SiteSessionJWT";
 const secret = process.env.JWT_SECRET as string;
 
 export async function GET(request: Request) {
