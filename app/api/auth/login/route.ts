@@ -1,24 +1,31 @@
 import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
-import { sign } from "jsonwebtoken";
-import { createClient } from '@supabase/supabase-js';
 import { COOKIE_NAME, MAX_AGE } from '@/constants';
 import { supabase } from '@/types/supabaseClient';
 
 
 export async function POST(request: Request) {
-
     try {
+        // receive email and password
         const { email, password } = await request.json();
 
+        // use supabase authorization to log in 
         const { data, error } = await supabase.auth.signInWithPassword({email, password});
-        console.log(data.session?.user.id);
         if(error) {
             console.log(error);
-            return NextResponse.json({error: "error occurred"}, {status: 500})
+            return NextResponse.json({error: "Unable to log you in"}, {status: 500})
         }
         else {
-            return NextResponse.json({message: "success", data: data}, {status: 200});
+            // no need to check verification because row is already stored
+            const res = NextResponse.json({ success: true }, { status: 200 });
+            res.cookies.set('sb-access-token', data.session.access_token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              path: '/',
+              maxAge: MAX_AGE,
+            });
+            return res;
         }
     } catch (error : any) {
         return NextResponse.json({error:"an unknown error occurred"}, {status:500});

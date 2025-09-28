@@ -1,9 +1,8 @@
 import { createClient } from '@supabase/supabase-js';  // for supabase
 import nodemailer from 'nodemailer';  // for sending verification email
-
+import { supabase, supabaseAdmin } from '@/types/supabaseClient';
 
 // Define constants for supabase client and verification link
-const supabase = createClient( process.env.SUPABASE_URL || "", process.env.SUPABASE_ANON_KEY || "" );
 const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify-email";
 
 
@@ -55,7 +54,8 @@ export async function registerUser(email: string, password: string): Promise<{ s
       return { success: false, error: error.message }
     }
     if (data) {
-        const result = await supabase.from('users').insert({
+        console.log(data.user!.id);
+        const result = await supabaseAdmin.from('users').insert({
             auth_id: data.user!.id, // Supabase UUID
             email: data.user!.email,
             verification: 0, // optional, if you want your own tracking
@@ -92,7 +92,7 @@ export async function sendVerificationEmail(to: string, token: string) {
 
 // updateVerificationCodes updates with new user data in verification_codes table
 export async function updateVerificationCodes(user_id: number, code: string, experiation_date: string): Promise<{ success: boolean; error?: string }> {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
         .from('verification-codes')
         .insert([
             {

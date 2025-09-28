@@ -19,10 +19,11 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post("/api/login", payload);
+      const response = await axios.post("/api/auth/login", payload);
       if (response.status === 200) {
         // alerts the user that login was successful
         alert("Login successful");
+        push('/');
       }
     } catch (e) {
       const error = e as AxiosError;

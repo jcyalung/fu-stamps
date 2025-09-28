@@ -1,8 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-import { supabase } from '@/types/supabaseClient';
 
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
 // header function
 export async function POST(request: Request) {
+
+
+
   try {
     const { verification_code } = await request.json();
 

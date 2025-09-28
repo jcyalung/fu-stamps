@@ -1,52 +1,27 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { verify } from "jsonwebtoken";
+import { supabase } from "@/types/supabaseClient";
 import { COOKIE_NAME } from "@/constants";
 
-const secret = process.env.JWT_SECRET as string;
+export async function GET() {
 
-export async function GET(request: Request) {
+  // connect to DB to sign out current user
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get(COOKIE_NAME)?.value;
+    const { error } = await supabase.auth.signOut();
 
-    if (!token) {
-      return NextResponse.json(
-        { error: "No session is available" },
-        { status: 400 }
-      );
-    }
-
-    let email = "user"; //fallback
-
-    try {
-      const decoded: any = verify(token, secret);
-      email = decoded.email;
-    } catch (err) {
-      return NextResponse.json(
-        { error: "No session is available" },
-        { status: 400 }
-      );
-    }
-    //create a response for successfull logout
-    const response = NextResponse.json(
-      { message: `Successfully logged out ${email}` },
-      { status: 200 }
-    );
-    //set the cookies maxAge to -1 for logging out
-    response.cookies.set({
-        name: COOKIE_NAME,
-        value: "",
-        httpOnly: true, 
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict", 
+    // if error occurs
+    if (error) {throw Error(error.message); }
+    else { 
+      // otherwise return successful
+      const res = NextResponse.json({message: "logged out successfully"}, {status:200}); 
+      res.cookies.set(COOKIE_NAME, '', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
         maxAge: -1,
-        path: "/",  
-    });
-    
-    return response;
-
-
+      })
+      return res;
+    }
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "An unknown error occurred" },

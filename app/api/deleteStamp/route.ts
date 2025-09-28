@@ -3,13 +3,13 @@ import { verify } from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { COOKIE_NAME } from '@/constants';
-import { supabase } from '@/types/supabaseClient';
+import { createSupabaseUserClient } from '@/types/supabaseClient';
 
 export async function POST(request: Request) {
   try {
     // parses cookies
     const cookieStore = await cookies();
-    const token = cookieStore.get(COOKIE_NAME);
+    const token = cookieStore.get(COOKIE_NAME)?.value;
 
     if (!token) {
       return NextResponse.json({
@@ -18,21 +18,8 @@ export async function POST(request: Request) {
         user: {}
       }, { status: 400 });
     }
-    // verifies the JWT
-    let decoded: any;
-    try {
-      const { value } = token;
-      decoded = verify(value, process.env.SUPABASE_JWT_SECRET || '');
-    } catch {
-      return NextResponse.json({
-        status_code: 400,
-        error: 'Invalid or expired session',
-        user: {}
-      }, { status: 400 });
-    }
 
-    const user_id = decoded.sub;
-
+    const supabaseUser = createSupabaseUserClient(token);
     // checks if the user exists
     const { data: user, error: userError } = await supabase
       .from('users')
