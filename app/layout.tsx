@@ -42,7 +42,9 @@ export default async function RootLayout({
           {children}
         </main>
 
-        <footer>placeholder for footer </footer>
+        <footer>
+          placeholder for footer 
+        </footer>
       </body>
     </html>
   );

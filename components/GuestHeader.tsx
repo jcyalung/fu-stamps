@@ -10,7 +10,7 @@ const montserrat = Montserrat({
 
 export default function GuestHeader() {
     return (
-        <div className="fixed w-full h-[68px] bg-black">
+        <div className="fixed w-full h-[68px] bg-black z-100">
             <div className={`flex justify-between items-center h-full px-4 ${montserrat.className}`}>
                 <div className="flex items-center text-darkgrey text-3xl gap-10">
                     {/* logo on the left */}
