@@ -9,10 +9,10 @@ export default function Footer() {
                     <div className="">Stay connected with FUSION</div>
 
                     <div className=" flex gap-10">
-                        <a href="">instagram</a>
+                        <a href="https://www.instagram.com/fusionatuci/">instagram</a>
                         <a href="">discord</a>
                         <a href="">email newsletter</a>
-                        <a href="">linktree</a>
+                        <a href="https://linktr.ee/FUSIONInternals?fbclid=PAZXh0bgNhZW0CMTEAAac5-8BtaKdqdzq8KmbssgUHgFY3tlalG2ViRGtGpjHFo_Q4lbTRSakKxUnKAg_aem_Kx3GOKycV9zd3buPfYql3Q">linktree</a>
                     </div>
                    
                 </div>
