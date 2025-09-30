@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { ROUTE_ACCESS } from "./components/routes";
-import { COOKIE_NAME, TABLES } from "./constants";
-const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
+import { TABLES } from "./constants";
 export async function middleware(req: NextRequest) {
     const res = NextResponse.next();
     try {
@@ -11,8 +10,8 @@ export async function middleware(req: NextRequest) {
         const {
             data : { session }, error : supabaseError
         } = await supabase.auth.getSession();
-        console.log(session, supabaseError);
-        if(!session) {
+        if(!session || supabaseError) {
+            console.error(supabaseError?.message)
             return NextResponse.redirect(new URL('/login', req.url));
         }
         
@@ -32,7 +31,7 @@ export async function middleware(req: NextRequest) {
     }
     catch(err : any) {
         console.error(err.message);
-        return NextResponse.redirect(new URL('/', req.url));
+        return NextResponse.redirect(new URL('/404', req.url));
     }
 }
 

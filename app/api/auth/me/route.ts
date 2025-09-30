@@ -1,25 +1,23 @@
 import { cookies } from 'next/headers';            // Next.js helper
-import { createSupabaseUserClient } from '@/types/supabaseClient';
-import { COOKIE_NAME } from '@/constants';
+import { COOKIE_NAME, TABLES } from '@/constants';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 
 export async function GET(request: Request) {
-  // Read cookies using Next's helper
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get(COOKIE_NAME)?.value;
-
-  if (!accessToken) {
-    return new Response('Not authenticated', { status: 401 });
+  const token = await cookieStore.get(COOKIE_NAME);
+  console.log(token);
+  if(!token) {
+    return new Response(JSON.stringify({message: 'error'}), { status: 401 });
   }
-
-  // Create a user-scoped supabase client for this request
-  const supabaseUser = createSupabaseUserClient(accessToken);
-
-  // Now you can run RLS-checked queries
-  const { data: userData, error } = await supabaseUser.auth.getUser();
-
-  if (error) {
-    return new Response('Invalid token', { status: 401 });
-  }
-
-  return new Response(JSON.stringify(userData), { status: 200 });
+  
+   //const { data: userData, error: userError } = await supabase
+   //    .from(TABLES.USERS)
+   //    .select('verification')
+   //    .eq('auth_id', session.user.id) // auth_id = Supabase user UUID
+   //    .single();
+   //if (userError) {
+   //  return new Response('Invalid token', { status: 401 });
+   //}
+   //const verification = userData?.verification;
+  return new Response(JSON.stringify({message:'soemthing'}), { status: 200 });
 }
