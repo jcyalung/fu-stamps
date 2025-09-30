@@ -34,7 +34,7 @@ export default function Home() {
         alert("Login successful");
         push('/');
       }
-    } catch (e) {
+    } catch (e : any) {
       const error = e as AxiosError;
       // displays error message and error code
        if (error.response) {

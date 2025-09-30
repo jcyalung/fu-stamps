@@ -1,10 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { COOKIE_NAME } from "@/constants";
-import { cookies } from 'next/headers'
-import { verify } from "jsonwebtoken";
-import { NextResponse } from "next/server";
 import { MEMBERROUTES } from "./routes";
 const montserrat = Montserrat({
     weight: ["400"],
@@ -13,7 +9,7 @@ const montserrat = Montserrat({
 
 
 
-export default async function GuestHeader() {
+export default function MemberHeader() {
     return (
         <div className="fixed w-full h-[68px] bg-black">
             <div className={`flex justify-between items-center h-full px-4 ${montserrat.className}`}>
