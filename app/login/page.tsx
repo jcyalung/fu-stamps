@@ -3,6 +3,7 @@
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
+import Image from "next/image";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -50,38 +51,56 @@ export default function Home() {
       backgroundColor: '#FFFBEF',
       display: 'block',
       }}>
-        
-        <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-screen">
-          <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white flex flex-col items-center justify-center">
-            <div className="flex flex-col mb-[48px] w-[280px]">
-              <label htmlFor="email" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
-              <input
-                type="text"
-                id="email"
-                name="email"
-                required
-                className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
-              />
-            </div>
-            <div className="flex flex-col mb-[48px] w-[280px]">
-              <label htmlFor="password" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
-              <input
-              //changed input type to password on some secure shi
-                type="password"
-                id="password"
-                name="password"
-                required
-                className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
-              />
-            </div>
-            <button
-              type="submit"
-              className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
-            >
-              LOGIN
-            </button>
+        <div className="relative w-[1149px] h-screen overflow-hidden">
+          <Image
+            src="/fusion_logo.png"
+            alt="logo"
+            fill
+            className="object-cover object-[75%_25%]"
+          />
+        </div>
+        <div className="absolute top-[17.72vh] left-1/2 z-0">
+          <div className="flex flex-col items-center">
+            <Image
+              src="/title.png"
+              alt="FU Stamps Title"
+              width={731}
+              height={50}
+              className="mb-[25px]"
+            />
+            <form onSubmit={handleSubmit} >
+              <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white/90 flex flex-col items-center justify-center">
+                <div className="flex flex-col mb-[48px] w-[280px]">
+                  <label htmlFor="email" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    required
+                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
+                  />
+                </div>
+                <div className="flex flex-col mb-[48px] w-[280px]">
+                  <label htmlFor="password" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
+                  <input
+                  //changed input type to password on some secure shi
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
+                >
+                  LOGIN
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
     </main>
   );
 }
