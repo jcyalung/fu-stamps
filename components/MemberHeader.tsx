@@ -9,7 +9,7 @@ const montserrat = Montserrat({
 
 
 
-export default async function MemberHeader() {
+export default function MemberHeader() {
     return (
         <div className="fixed w-full h-[68px] bg-black">
             <div className={`flex justify-between items-center h-full px-4 ${montserrat.className}`}>

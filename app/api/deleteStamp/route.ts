@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { COOKIE_NAME } from '@/constants';
+import { COOKIE_NAME, TABLES } from '@/constants';
 import { createSupabaseUserClient } from '@/types/supabaseClient';
 
 export async function POST(request: Request) {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const supabaseUser = createSupabaseUserClient(token);
     // checks if the user exists
     const { data: user, error: userError } = await supabaseUser
-      .from('users')
+      .from(TABLES.USERS)
       .select('id')
       .single();
     
@@ -34,10 +34,10 @@ export async function POST(request: Request) {
     }
 
     // retrieves stamp cards with num_stamps value of 10
-    const { data: stampCards, error: stampCardError } = await supabase
-      .from('stamp_card')
+    const { data: stampCards, error: stampCardError } = await supabaseUser
+      .from()
       .select('id, stamps, created_at')
-      .eq('user_id', user_id)
+      .eq('auth_id', user.id)
       .eq('num_stamps', 10)
       .order('created_at', { ascending: false });
 

@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';  // for sending verification email
 import { supabase, supabaseAdmin } from '@/types/supabaseClient';
 
 // Define constants for supabase client and verification link
-const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify-email";
+const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/api/verifyEmail";
 
 
 // Checks if the email and password are valid and returns appropiate error message and status codes accordingly
@@ -51,16 +51,14 @@ export async function validateEmailPassword(email: string, password: string): Pr
 export async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any; error?: string }> {
     const { data, error } = await supabase.auth.signUp({email, password});
     if (error) {
-      return { success: false, error: error.message }
+        return { success: false, error: error.code }
     }
     if (data) {
-        console.log(data.user!.id);
         const result = await supabaseAdmin.from('users').insert({
             auth_id: data.user!.id, // Supabase UUID
             email: data.user!.email,
             verification: 0, // optional, if you want your own tracking
         });
-        console.log(result);
     }
     
 
