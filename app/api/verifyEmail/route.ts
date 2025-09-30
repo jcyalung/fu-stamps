@@ -1,14 +1,15 @@
-import { createClient } from '@supabase/supabase-js';
-
-const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
-// header function
+import { supabaseAdmin } from '@/types/supabaseClient';
+import { TABLES } from '@/constants';
+/**
+ * we must check if the verification code if it exists in the database, then verify the user associated with the verification code
+ * @param request 
+ * @returns 
+ */
 export async function POST(request: Request) {
-
-
-
+  // we need supabase admin to verify verification codes, considering user is not logged in
+  
   try {
     const { verification_code } = await request.json();
-
     //checks if there is no verification code
     if (!verification_code) {
       return new Response(
@@ -17,22 +18,25 @@ export async function POST(request: Request) {
     }
 
     // checks if verification code exists
-    const { data: codeEntry, error: codeError } = await supabase
-      .from('verification-codes')
+    const { data: codeEntry, error: codeError } = await supabaseAdmin
+      .from(TABLES.VERIFICATION_CODES)
       .select('*')
       .eq('code', verification_code)
       .single();
 
-    if (codeError || !codeEntry) {
-      return new Response(
-        JSON.stringify({ error: 'Verification code not found' }), {status: 404}
-      );
-    }
+     
+    // throw error if no verification code was found
+    if (codeError) { throw Error('No verification code was found'); }
 
+    // delete code bc we dont need it before
+    const { data: deletedCode, error: deletedError } = await supabaseAdmin
+      .from('verificationcodes')
+      .delete()
+      .eq('code', codeEntry.code);
+    
     // checks if code expired
-    const expiry = new Date(codeEntry.expires).toISOString().slice(0,10);
+    const expiry = new Date(codeEntry.expiration).toISOString().slice(0,10);
     const current = new Date().toISOString().slice(0,10);
-
     if (expiry < current) {
       return new Response(
         JSON.stringify({ error: 'Verification code expired' }), {status: 401}
@@ -40,10 +44,10 @@ export async function POST(request: Request) {
     }
 
     // updates user verification status
-    const { data: updatedUser, error: updateError } = await supabase
+    const { data: updatedUser, error: updateError } = await supabaseAdmin
       .from('users')
       .update({ verification: 1 })
-      .eq('id', codeEntry.user_id)
+      .eq('auth_id', codeEntry.auth_id)
       .select('email')
       .single();
 
@@ -53,14 +57,16 @@ export async function POST(request: Request) {
         JSON.stringify({ error: 'Database error: Failed to update user' }), {status: 500}
       );
     }
-
+    
     // success responses
     return new Response(
-      JSON.stringify({message: `Verified user ${updatedUser.email}!`}), {status: 200}
+      JSON.stringify({message: 
+        `Verified user ${updatedUser.email}!`
+      }), {status: 200}
     );
   } catch (err : any) {
     return new Response(
-      JSON.stringify({error: err}), {status: 500}
+      JSON.stringify({error: err.message}), {status: 500}
     );
   }
 }

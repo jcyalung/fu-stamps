@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/types/supabaseClient";
-
+import { createSupabaseUserClient, supabaseAdmin } from "@/types/supabaseClient";
+import { cookies } from "next/headers";
+import { COOKIE_NAME, TABLES } from "@/constants";
 /**
  * This is an endpoint for the Academic Directors to set a stamp
  * Sets the stamp of the day based on the 'stamp' parameter.
@@ -12,11 +12,11 @@ import { supabase } from "@/types/supabaseClient";
  * 409 if a word already exists for the day
  * 500 for database errors
  */
-export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
     const url = new URL(req.url); //creates a new URL object from the incoming HTTP request
     const raw_stamp = url.searchParams.get("stamp"); //gets the parameter named stamp
-
+    
     if (!raw_stamp) {
       //if the extracted stamp is null
       return NextResponse.json(
@@ -35,10 +35,21 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get(COOKIE_NAME)?.value;
+
+    if(!token) {
+      throw Error('Unable to verify user');
+    }
+
+    const supabaseUser = createSupabaseUserClient(token);
+
+    const { data : user, error : userError } = await supabaseUser.from(TABLES.USERS).select().single();;
+    console.log(user);
     const currentDate = new Date().toISOString().slice(0, 10);
 
     // Check if a stamp already exists for today
-    const { data: existingStamp, error: checkError } = await supabase
+    const { data: existingStamp, error: checkError } = await supabaseAdmin
       .from("stamps")
       .select("id")
       .filter('created_at::date', 'eq', currentDate)
@@ -56,7 +67,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseAdmin
       .from("stamps")
       .insert([{ word: stamp}]);//handles the time 
 
@@ -69,6 +80,6 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json({ error : error.message }, { status: 500 });
   }
 }

@@ -1,29 +1,39 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { jwtVerify } from 'jose';
+import { NextRequest } from "next/server";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import { ROUTE_ACCESS } from "./components/routes";
+import { COOKIE_NAME, TABLES } from "./constants";
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env;
 export async function middleware(req: NextRequest) {
-    const pathname = req.nextUrl.pathname;
-
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-
-    const token = req.cookies.get('SiteSessionJWT')?.value;
-    let verification = 0;
-
-    if(!token) {
-        console.log('verification not available');
+    const res = NextResponse.next();
+    try {
+        const supabase = createMiddlewareClient({req, res});
+        const {
+            data : { session }, error : supabaseError
+        } = await supabase.auth.getSession();
+        console.log(session, supabaseError);
+        if(!session) {
+            return NextResponse.redirect(new URL('/login', req.url));
+        }
+        
+        // check user
+        const { data : user, error : userError } = await supabase.from(TABLES.USERS).select('verification').single();
+        if(userError) { throw Error(userError.message); }
+        const verification  = user?.verification;
+    
+        const pathname = req.nextUrl.pathname;
+        
+        // check rules that exist for specific pathname
+        const rule = ROUTE_ACCESS.find((r) => r.pattern.test(pathname));
+        if (rule && verification < rule.minLevel) {
+            return NextResponse.redirect(new URL('/unauthorized', req.url));
+        }
+        return NextResponse.next();
     }
-    else {
-        const { payload } = await jwtVerify(token, secret);
-        verification = payload.verification as number;
-        console.log(verification);
+    catch(err : any) {
+        console.error(err.message);
+        return NextResponse.redirect(new URL('/', req.url));
     }
-
-    const rule = ROUTE_ACCESS.find((r) => r.pattern.test(pathname));
-    if (rule && verification < rule.minLevel) {
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
-    }
-    return NextResponse.next();
 }
 
 export const config = {

@@ -1,33 +1,50 @@
-import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
-import { COOKIE_NAME, MAX_AGE } from '@/constants';
+import { COOKIE_NAME, LONG_AGE, MAX_AGE, REFRESH_NAME } from '@/constants';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { serialize } from 'cookie';
 import { supabase } from '@/types/supabaseClient';
-
-
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = process.env; 
 export async function POST(request: Request) {
     try {
         // receive email and password
         const { email, password } = await request.json();
 
         // use supabase authorization to log in 
-        const { data, error } = await supabase.auth.signInWithPassword({email, password});
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email, 
+            password
+        });
+        
         if(error) {
             console.log(error);
             return NextResponse.json({error: "Unable to log you in"}, {status: 500})
         }
         else {
             // no need to check verification because row is already stored
-            const res = NextResponse.json({ success: true }, { status: 200 });
-            res.cookies.set('sb-access-token', data.session.access_token, {
+            
+            const accessCookie = serialize(COOKIE_NAME, data.session.access_token, {
               httpOnly: true,
               secure: process.env.NODE_ENV === 'production',
               sameSite: 'lax',
               path: '/',
               maxAge: MAX_AGE,
             });
-            return res;
+
+            const refreshCookie = serialize(REFRESH_NAME, data.session.refresh_token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              sameSite: 'lax',
+              path: '/',
+              maxAge: LONG_AGE,
+            });
+
+            return NextResponse.json(
+                { user: data.user },
+                { status: 200, headers: { 'Set-Cookie': [accessCookie, refreshCookie].join('; ') } }
+            );
         }
     } catch (error : any) {
+        console.log(error.message);
         return NextResponse.json({error:"an unknown error occurred"}, {status:500});
     }
     /* try {
@@ -93,16 +110,5 @@ export async function POST(request: Request) {
 
         const response = {
             message: `Successfully logged in ${email}`,
-        }
-
-        return new Response(JSON.stringify(response), {
-            status: 200,
-            headers: {
-                "Set-Cookie": serialized,
-            },
-        });
-    }
-    catch (error: any) {
-        return NextResponse.json({message: error.message}, {status : 500})
-    } */
+        }*/
 }

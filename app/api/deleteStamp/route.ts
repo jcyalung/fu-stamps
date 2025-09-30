@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-import { verify } from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { COOKIE_NAME } from '@/constants';
@@ -21,12 +19,11 @@ export async function POST(request: Request) {
 
     const supabaseUser = createSupabaseUserClient(token);
     // checks if the user exists
-    const { data: user, error: userError } = await supabase
+    const { data: user, error: userError } = await supabaseUser
       .from('users')
       .select('id')
-      .eq('id', user_id)
       .single();
-
+    
     // error handling if user is not found
     if (userError || !user) {
       return NextResponse.json({
