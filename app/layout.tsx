@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import axios, { AxiosError } from "axios";
 import { COOKIE_NAME, TABLES } from "@/constants";
 import { createSupabaseUserClient } from "@/types/supabaseClient";
+import Footer from "@/components/footer";
 const { NEXT_PUBLIC_BASE_URL } = process.env;
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,7 +79,7 @@ export default async function RootLayout({
 
         {children}
 
-        <footer>placeholder for footer </footer>
+        <footer> <Footer/> </footer>
       </body>
     </html>
   );
