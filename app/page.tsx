@@ -1,16 +1,14 @@
 "use client"
 import Image from "next/image";
 import page_image from '@/components/images/landing_page_section.png';
-import { Montserrat } from "next/font/google";
 import TitleTextbox from "@/components/TitleTextbox";
-import { STUDY_HOURS, getUpcomingStudySession } from "@/constants";
-import { AcademicsModal, MemberModal, GuestModal } from "@/components/Modals";
-import ModalSelector from "@/components/ModalSelector";
+import ModalSelector from "@/components/root/ModalSelector";
+import LogoBackground from "@/components/root/LogoBackground";
+import RewardBox from '@/components/root/reward_box.png';
+import { StampProto, StampCardProto, HowItWorks } from "@/components/root/Section2";
+import { getUpcomingStudySession, montserrat_global as montserrat, STUDY_HOURS } from "@/constants";
+const { dates, times } = STUDY_HOURS
 
-const montserrat = Montserrat({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-})
 export default function Home() {
   const details = getUpcomingStudySession();
   return (
@@ -48,6 +46,99 @@ export default function Home() {
           <ModalSelector />
         </div>
       </div>
+
+
+      {/* break line */}
+      <div className='flex gap-16 min-w-screen bg-yellowunderline border-2 border-black justify-center items-center' />
+
+
+      {/* ts don't work so we'll get back to it later
+      <div className="relative w-full min-h-screen bg-lightyellow">
+        
+        <LogoBackground />
+
+        
+        <div className="relative flex flex-col md:flex-row items-start md:items-center w-full h-full px-8 md:px-16">
+
+          
+          <div className="flex flex-col gap-16 md:w-1/2 mt-20">
+            <StampProto />
+            <HowItWorks />
+          </div>
+
+          
+          <div className="flex flex-col items-center gap-16 md:w-1/2 mt-20">
+            <Image
+              src={RewardBox}
+              alt="hot_dog_reward"
+              className="p-6 rounded-2xl shadow-lg"
+            />
+            <div className="mt-auto">
+              <StampCardProto />
+            </div>
+          </div>
+        </div>
+      </div>
+      */}
+
+      {/* break line */}
+      <div className='flex gap-16 min-w-screen bg-yellowunderline border-2 border-black justify-center items-center' />
+
+      <div className="flex flex-col min-w-screen min-h-screen justify-center px-8">
+        {/* Left-aligned heading */}
+        <h1
+          className="text-5xl font-extrabold font-verdana text-white text-left max-w-lg ml-[5%]"
+          style={{
+            WebkitTextStroke: '2px black',
+            WebkitTextFillColor: 'white',
+          }}
+        >
+          FAQs
+        </h1>
+        
+        {/* Centered content */}
+        <div className="flex flex-col items-center justify-center mt-16 gap-8 w-full">
+          <div className="flex flex-col bg-yellowunderline text-black w-[90%] h-[20%] border-1 border-b-6 border-r-4 p-[32px]">
+            <h1 className={`${montserrat.className} font-bold text-3xl text-left`}>
+              WHEN ARE STUDY HOURS?
+            </h1>
+              {(() => {
+                // check if study hours is today
+                const today = new Date();
+                const month = (today.getMonth() + 1).toString().padStart(2, '0'); // getMonth is 0-indexed
+                const day = today.getDate().toString().padStart(2, '0');
+                const mmdd = `${month}/${day}`;
+                if(mmdd === details.mmdd) {
+                  return(
+                    <span className={`${montserrat.className} italic text-2xl mt-3`}>
+                      Study Hours is happening today at {details.time}! It will be at {details.location}. Come study with FUSION!
+                     </span>
+                    )
+                }
+                else {
+                  return(
+                    <span className={`${montserrat.className} italic text-2xl mt-3`}>
+                        The next Study hours is happening on {details.label}, {mmdd}, during {details.time} at {details.location}.
+                    </span>
+                    )
+                }
+              })()}
+          </div>
+          <div className="flex flex-col bg-yellowunderline text-black w-[90%] h-[20%] border-1 border-b-6 border-r-4 p-[32px]">
+            <h1 className={`${montserrat.className} font-bold text-3xl text-left`}>
+              WILL PHYSICAL STAMP CARDS STILL BE USED?
+            </h1>
+            <span className={`${montserrat.className} italic text-2xl mt-3`}> Absolutely! there will still be in-person study hours where you can still you can use a physical card to earn stamps and turn them in for prizes too.</span>
+          </div>
+          <div className="flex flex-col bg-yellowunderline text-black w-[90%] h-[20%] border-1 border-b-6 border-r-4 p-[32px]">
+            <h1 className={`${montserrat.className} font-bold text-3xl text-left`}>
+              WHAT IF I FORGOT TO ADD THE STAMP EVEN THOUGH I WAS IN ATTENDANCE?
+            </h1>
+            <span className={`${montserrat.className} italic text-2xl mt-3`}> Talk to an academic director and they can update the system from their end.</span>
+          </div>
+        </div>
+      </div>
+
     </main>
   );
 }

@@ -1,3 +1,5 @@
+import { Montserrat } from "next/font/google";
+
 // cookie names
 export const COOKIE_NAME = "sb-access-token";
 export const REFRESH_NAME = "sb-refresh-token";
@@ -85,5 +87,9 @@ export function getUpcomingStudySession() {
   };
 }
 
-// Example usage:
-console.log(getUpcomingStudySession());
+export const montserrat_global = Montserrat({
+    variable: "--font-montserrat",
+    weight: ["400", "500", "600", "700", "800", "900"],
+    subsets: ["latin"],
+    style: ["normal", "italic"],
+})

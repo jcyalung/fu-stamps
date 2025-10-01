@@ -1,16 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { ACADEMICSROUTES } from "./routes";
-
+import { GUESTROUTES } from "@/components/routes";
 const montserrat = Montserrat({
     weight: ["400"],
     subsets: ["latin"],
 });
 
-export default function AcademicsHeader() {
+
+export default function GuestHeader() {
     return (
-        <div className="fixed w-full h-[68px] bg-black">
+        <div className="fixed w-full h-[68px] bg-black z-100">
             <div className={`flex justify-between items-center h-full px-4 ${montserrat.className}`}>
                 <div className="flex items-center text-darkgrey text-3xl gap-10">
                     {/* logo on the left */}
@@ -20,12 +20,12 @@ export default function AcademicsHeader() {
                             alt="Logo"
                             width={60}
                             height={60}
-                            className="rounded-full pt-2 pl-2"
+                            className="rounded-full"
                         />
                     </Link>
                 </div>
                 <div className="flex items-center text-darkgrey text-3xl gap-10">
-                    {Object.entries(ACADEMICSROUTES).map(([key, value]) => (
+                    {Object.entries(GUESTROUTES).map(([key, value]) => (
                         <Link key={value} href={key}> {value}</Link>
                     ))}
                 </div>
