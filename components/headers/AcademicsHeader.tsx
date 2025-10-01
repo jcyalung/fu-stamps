@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { ACADEMICSROUTES } from "./routes";
+import { ACADEMICSROUTES } from "@/components/routes";
 
 const montserrat = Montserrat({
     weight: ["400"],
@@ -18,9 +18,9 @@ export default function AcademicsHeader() {
                         <Image
                             src="/logo.png"
                             alt="Logo"
-                            width={40}
-                            height={40}
-                            className="rounded-full"
+                            width={60}
+                            height={60}
+                            className="rounded-full pt-2 pl-2"
                         />
                     </Link>
                 </div>

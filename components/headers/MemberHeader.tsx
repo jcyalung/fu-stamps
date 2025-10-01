@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { MEMBERROUTES } from "./routes";
+import { MEMBERROUTES } from "@/components/routes";
 
 const montserrat = Montserrat({
     weight: ["400"],
@@ -20,8 +20,8 @@ export default function MemberHeader() {
                         <Image
                             src="/logo.png"
                             alt="Logo"
-                            width={40}
-                            height={40}
+                            width={60}
+                            height={60}
                             className="rounded-full"
                         />
                     </Link>

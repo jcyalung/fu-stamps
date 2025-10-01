@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import HeaderSelector from "@/components/HeaderSelector";
+import HeaderSelector from "@/components/headers/HeaderSelector";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +34,9 @@ export default function RootLayout({
         <header className='fixed top-0 left-0 w-full shadow z-50'>
           <HeaderSelector />
         </header>
-
+        <div className='pt-20 bg-lightyellow'>
         {children}
+        </div>
 
         <footer>
           placeholder for footer 
