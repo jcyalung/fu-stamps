@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
 import { MEMBERROUTES } from "./routes";
+
 const montserrat = Montserrat({
     weight: ["400"],
     subsets: ["latin"],

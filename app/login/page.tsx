@@ -1,10 +1,8 @@
 "use client"
-
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
-
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
@@ -12,9 +10,8 @@ const montserrat = Montserrat({
   style: ["normal", "italic"],
 });
 
-export default function Home() {
+export default function LoginPage() {
   const { push } = useRouter();
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -51,7 +48,7 @@ export default function Home() {
       backgroundColor: '#FFFBEF',
       display: 'block',
       }}>
-        <div className="relative w-[1149px] h-screen overflow-hidden">
+        <div className="relative w-[1149px] h-screen overflow-hidden z-0">
           <Image
             src="/fusion_logo.png"
             alt="logo"
@@ -68,8 +65,10 @@ export default function Home() {
               height={50}
               className="mb-[25px]"
             />
-            <form onSubmit={handleSubmit} >
-              <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white/90 flex flex-col items-center justify-center">
+            <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white/90 flex flex-col items-center justify-center">
+              
+              <form onSubmit={handleSubmit} className="flex flex-col items-center w-full">
+
                 <div className="flex flex-col mb-[48px] w-[280px]">
                   <label htmlFor="email" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
                   <input
@@ -80,6 +79,7 @@ export default function Home() {
                     className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
                   />
                 </div>
+
                 <div className="flex flex-col mb-[48px] w-[280px]">
                   <label htmlFor="password" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
                   <input
@@ -91,14 +91,18 @@ export default function Home() {
                     className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
                   />
                 </div>
+
                 <button
                   type="submit"
                   className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
                 >
                   LOGIN
                 </button>
-              </div>
-            </form>
+              </form>
+
+              <p className= {`${montserrat.className} text-black pt-10`}>Don't have an account?</p>
+              <button className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 text-lg font-bold text-center`} onClick={() => {push('/register')}}> REGISTER</button>
+            </div>
           </div>
         </div>
     </main>

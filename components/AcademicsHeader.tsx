@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Montserrat } from "next/font/google";
-import { COOKIE_NAME } from "@/constants";
-import { verify } from "jsonwebtoken";
-import { NextResponse } from "next/server";
 import { ACADEMICSROUTES } from "./routes";
 
 const montserrat = Montserrat({
