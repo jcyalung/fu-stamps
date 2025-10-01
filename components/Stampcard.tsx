@@ -1,6 +1,6 @@
 import type { StampType, StampProps } from "@/types/types";
 import Image from "next/image";
-import design from '@/components/design-stampcard.png';
+import design from '@/components/images/design-stampcard.png';
 /*
 
 StampType is defined as:

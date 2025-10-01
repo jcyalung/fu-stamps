@@ -20,8 +20,8 @@ export default function MemberHeader() {
                         <Image
                             src="/logo.png"
                             alt="Logo"
-                            width={40}
-                            height={40}
+                            width={60}
+                            height={60}
                             className="rounded-full"
                         />
                     </Link>
