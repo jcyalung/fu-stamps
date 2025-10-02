@@ -1,4 +1,5 @@
 'use client';
+import { HOVER_STYLE } from "@/constants";
 import { useState } from "react";
 
 export default function Stamp(){
@@ -27,11 +28,11 @@ export default function Stamp(){
                     ENTER THE "WORD OF THE DAY"
                 </div>
                 <div className="flex w-[478px] h-[36px] border-1 rounded-4xl bg-lightyellow items-center">
-                    <input onChange={(e) => setWord(e.target.value)} type="text" className={`ml-[4px] h-[20px] input rounded-full bg-lightyellow focus:outline-none font-light`} />
+                    <input maxLength={60} onChange={(e) => setWord(e.target.value)} type="text" className={`flex w-full text-center bg-transparent h-[20px] input rounded-full border-none focus:outline-none font-light`} />
                 </div>
             </div>
             <div>
-                <button onClick={handleSetWord} className={`btn h-[56px] w-[161px] mt-[20px] border-b-4 border-r-2 rounded-none bg-amber-400 px-[24px] py-[16px] text-lg text-black`}>
+                <button onClick={handleSetWord} className={`${HOVER_STYLE} btn h-[56px] w-[161px] mt-[20px] border-b-4 border-r-2 rounded-none bg-amber-400 px-[24px] py-[16px] text-lg text-black`}>
                     SET WORD
                 </button>
             </div>
