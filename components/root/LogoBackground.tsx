@@ -2,7 +2,7 @@ import Image from "next/image";
 import logo from '@/components/root/fusion_logo.png';
 export default function LogoBackground() {
   return (
-      <div className='absolute inset-0 flex items-center justify-center -z-10'>
+      <div className='absolute inset-0 flex items-center justify-center z-10 animate-[spin_20s_linear_infinite]'>
           <Image
               src={logo}
               alt="Background Logo"
@@ -13,4 +13,3 @@ export default function LogoBackground() {
     </div>
   );
 }
-"absolute flex flex-col justify-center pt-20 items-center opacity-10 -z-10"

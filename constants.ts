@@ -93,3 +93,6 @@ export const montserrat_global = Montserrat({
     subsets: ["latin"],
     style: ["normal", "italic"],
 })
+
+// import this to add pop out hovers to buttons
+export const HOVER_STYLE = "transform transition-transform duration-300 hover:scale-105 hover:shadow-xl";
