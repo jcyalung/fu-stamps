@@ -1,11 +1,17 @@
 "use client"
-
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import { Montserrat } from "next/font/google";
+import Image from "next/image";
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+});
 
-export default function Home() {
+export default function LoginPage() {
   const { push } = useRouter();
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -25,7 +31,7 @@ export default function Home() {
         alert("Login successful");
         push('/');
       }
-    } catch (e) {
+    } catch (e : any) {
       const error = e as AxiosError;
       // displays error message and error code
        if (error.response) {
@@ -36,36 +42,69 @@ export default function Home() {
   };
 
   return (
-    <main>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-screen">
-        <div>
-          <label htmlFor="email">Email: </label>
-          <input 
-            type="text" 
-            id="email" 
-            name="email" 
-            required 
-            className="border p-2 mb-4" 
+    <main style={{
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: '#FFFBEF',
+      display: 'block',
+      }}>
+        <div className="relative w-[1149px] h-screen overflow-hidden z-0">
+          <Image
+            src="/fusion_logo.png"
+            alt="logo"
+            fill
+            className="object-cover object-[75%_25%]"
           />
         </div>
-        <div>
-          <label htmlFor="password">Password: </label>
-          <input
-          //changed input type to password on some secure shi 
-            type="password" 
-            id="password" 
-            name="password" 
-            required 
-            className="border p-2 mb-4" 
-          />
+        <div className="absolute top-[17.72vh] left-1/2 z-0">
+          <div className="flex flex-col items-center">
+            <Image
+              src="/title.png"
+              alt="FU Stamps Title"
+              width={731}
+              height={50}
+              className="mb-[25px]"
+            />
+            <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white/90 flex flex-col items-center justify-center">
+              
+              <form onSubmit={handleSubmit} className="flex flex-col items-center w-full">
+
+                <div className="flex flex-col mb-[48px] w-[280px]">
+                  <label htmlFor="email" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
+                  <input
+                    type="text"
+                    id="email"
+                    name="email"
+                    required
+                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
+                  />
+                </div>
+
+                <div className="flex flex-col mb-[48px] w-[280px]">
+                  <label htmlFor="password" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
+                  <input
+                  //changed input type to password on some secure shi
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
+                >
+                  LOGIN
+                </button>
+              </form>
+ 
+              <p className= {`${montserrat.className} text-black pt-10`}>Don't have an account?</p>
+              <button className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 text-lg font-bold text-center`} onClick={() => {push('/register')}}> REGISTER</button>
+            </div>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-        >
-          Login
-        </button>
-      </form>
     </main>
   );
 }

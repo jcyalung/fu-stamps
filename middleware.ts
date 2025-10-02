@@ -10,10 +10,22 @@ export async function middleware(req: NextRequest) {
         const {
             data : { session }, error : supabaseError
         } = await supabase.auth.getSession();
+        // login special case
+        // if you're already logged in or registered, you cannot access these pages
+        if(req.nextUrl.pathname === '/login' || req.nextUrl.pathname === '/register') {
+            if(session) {
+                return NextResponse.redirect(new URL('/', req.url));
+            }
+            else {
+                return NextResponse.next();
+            }
+        }
         if(!session || supabaseError) {
             console.error(supabaseError?.message)
             return NextResponse.redirect(new URL('/login', req.url));
         }
+        
+        // login and register special case
         
         // check user
         const { data : user, error : userError } = await supabase.from(TABLES.USERS).select('verification').single();
