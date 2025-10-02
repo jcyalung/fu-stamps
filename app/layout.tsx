@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Montserrat} from "next/font/google";
 import "./globals.css";
+import { montserrat_global as montserrat } from "@/constants";
+import { cookies } from "next/headers";
+import axios, { AxiosError } from "axios";
+import { COOKIE_NAME, TABLES } from "@/constants";
+import { createSupabaseUserClient } from "@/types/supabaseClient";
+import Footer from "@/components/footer";
 import HeaderSelector from "@/components/headers/HeaderSelector";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.variable} antialiased`}
       >
         <header className='fixed top-0 left-0 w-full shadow z-50'>
           <HeaderSelector />
@@ -39,7 +35,7 @@ export default function RootLayout({
         </div>
 
         <footer>
-          placeholder for footer 
+          <Footer />
         </footer>
       </body>
     </html>
