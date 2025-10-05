@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createSupabaseUserClient, supabaseAdmin } from "@/types/supabaseClient";
+import { NextResponse } from "next/server";
+import { supabaseAdmin } from "@/types/supabaseClient";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { COOKIE_NAME, TABLES } from "@/constants";
 /**
@@ -34,23 +35,21 @@ export async function GET(req: Request) {
         { status: 400 }
       );
     }
-
-    const cookieStore = await cookies();
-    const token = cookieStore.get(COOKIE_NAME)?.value;
-
-    if(!token) {
-      throw Error('Unable to verify user');
+    const cookieStore = (await cookies()) as any;
+    const supabase = createRouteHandlerClient({ cookies : () => cookieStore });
+    // retrieve token and check if user is an academics director
+    const {
+      data : { session },
+      error : userError
+    } = await supabase.auth.getSession();
+    if(userError) {
+      console.log(userError);
     }
-
-    const supabaseUser = createSupabaseUserClient(token);
-
-    const { data : user, error : userError } = await supabaseUser.from(TABLES.USERS).select().single();;
-    console.log(user);
     const currentDate = new Date().toISOString().slice(0, 10);
 
     // Check if a stamp already exists for today
     const { data: existingStamp, error: checkError } = await supabaseAdmin
-      .from("stamps")
+      .from(TABLES.STAMPS)
       .select("id")
       .filter('created_at::date', 'eq', currentDate)
       .single();
@@ -68,8 +67,8 @@ export async function GET(req: Request) {
     }
 
     const { error: insertError } = await supabaseAdmin
-      .from("stamps")
-      .insert([{ word: stamp}]);//handles the time 
+      .from(TABLES.STAMPS)
+      .insert([{ auth_id: session?.user.id, word: stamp}]);//handles the time 
 
     if (insertError) {
       throw new Error(insertError.message);
@@ -80,6 +79,7 @@ export async function GET(req: Request) {
       { status: 200 }
     );
   } catch (error: any) {
+    //console.log(error);
     return NextResponse.json({ error : error.message }, { status: 500 });
   }
 }

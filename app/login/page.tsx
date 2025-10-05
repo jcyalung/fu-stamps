@@ -33,10 +33,12 @@ export default function LoginPage() {
       }
     } catch (e : any) {
       const error = e as AxiosError;
+      console.log(error);
+      const { response } = error;
       // displays error message and error code
-       if (error.response) {
-        const data = error.response.data as { message?: string };
-        alert(data.message + '\n' + error.message || "An unknown error occurred.");
+       if (error.message) {
+        const { message } = response?.data as any;
+        alert(message + '\n' + error.message || "An unknown error occurred.");
       }
     }
   };

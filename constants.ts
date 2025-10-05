@@ -11,6 +11,7 @@ export const TABLES = {
     VERIFICATION_CODES: 'verificationcodes',
     USERS: 'users',
     STAMPS: 'stamp',
+    LOG: 'stamp_log',
     STAMPCARDS: 'stampcard',
     REWARDS: 'rewards',
 };

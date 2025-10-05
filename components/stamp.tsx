@@ -1,6 +1,7 @@
 'use client';
 import { HOVER_STYLE } from "@/constants";
 import { useState } from "react";
+import axios, { AxiosError } from "axios";
 
 export default function Stamp(){
     // fade in and out the status message
@@ -10,15 +11,28 @@ export default function Stamp(){
     const [word, setWord] = useState("");
     const [message, setMessage] = useState("");
 
-    const handleSetWord = () => {
-        setStatus("flex");
-        setFade(true);
-
-        setMessage(`THE WORD OF THE DAY "${word}" HAS BEEN SET`);
-
-        setTimeout(() => {
-            setFade(false);
-        }, 3000);
+    const handleSetWord = async () => {
+        try {
+            setWord(word.toLowerCase());
+            const response = await axios.get(`/api/setStamp?stamp=${word}`);
+            if(response.status === 200) {
+                setFade(true);
+                setStatus("flex");
+                setMessage(`THE WORD OF THE DAY "${word}" HAS BEEN SET`);
+                setTimeout(() => {
+                    setFade(false);
+                }, 3000);
+                setWord('');
+            }
+        }
+        catch(e : any) {
+            const error = e as AxiosError;
+            const { response } = error
+            if(response) {
+                const { data } = response as any;
+                alert(data.error + '\n' + error.message || "An unknown error occurred.");
+            }
+        }
     }
 
     return (
@@ -34,14 +48,14 @@ export default function Stamp(){
             <div>
                 <button onClick={handleSetWord} className={`${HOVER_STYLE} btn h-[56px] w-[161px] mt-[20px] border-b-4 border-r-2 rounded-none bg-amber-400 px-[24px] py-[16px] text-lg text-black`}>
                     SET WORD
-                </button>
+                </button> 
             </div>
             {/* in the future this will be conditionally rendered based on the token */}
             <div className={status + `italic bg-amber-400 w-[685px] mt-[90px] p-[24px] justify-center border-1 border-b-6 border-r-4 text-[26px]
                             transition-all ease-in-out duration-500 ${fade ? "opacity-100" : "opacity-0"}`}>
-                {message}
+           x     {message}
             </div>
-            <div className={`hidden italic bg-amber-400 w-[740px] h-[87px] mt-[90px] p-[24px] justify-center border-1 border-b-6 border-r-4 text-[26px]`}>
+            <div className={`hidden italic bg-amber-400 w-[740px] h-[87px] mt-[90px] p-[24px] justify-center border-1 border-b-6 border-r-4 text-center text-[26px]`}>
                 THE WORD OF THE DAY "{word}" FAILED TO BE SET
             </div>
         </div>

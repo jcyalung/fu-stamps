@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { COOKIE_NAME } from "@/constants";
+import { COOKIE_NAME, TABLES } from "@/constants";
 import { verify } from "jsonwebtoken";
-import { createClient } from "@supabase/supabase-js";
-import { supabase } from "@/types/supabaseClient";
+import { supabase, supabaseAdmin } from "@/types/supabaseClient";
+import { cookies } from "next/headers";
 
 /**
  * This is an endpoint for adding a new stamp to a stampcard
@@ -17,26 +17,13 @@ import { supabase } from "@/types/supabaseClient";
  */
 export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get(COOKIE_NAME)?.value;
-    if (!token) {
+    const {
+      data : {session}
+    } = await supabase.auth.getSession();
+
+    if(!session) {
       return NextResponse.json(
         { message: "Authentication token not found" },
-        { status: 401 }
-      );
-    }
-    //verify the JWT
-    let user_id: number;
-    try {
-      const secret = process.env.JWT_SECRET || "";
-      const decoded = verify(token, secret) as {
-        email: string;
-        verification: number;
-        id: number;
-      };
-      user_id = decoded.id;
-    } catch (error) {
-      return NextResponse.json(
-        { message: "Invalid or expired token" },
         { status: 401 }
       );
     }
@@ -45,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     //stamp verification
     const { data: todayStampData, error: stampError } = await supabase
-      .from("stamps")
+      .from(TABLES.STAMPS)
       .select("word")
       .eq("created_at", currentDate)
       .single();
@@ -58,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const todayStampWord = todayStampData.word;
-    const { stamp }: { stamp: string } = await request.json();
+    const { stamp } : { stamp: string } = await request.json();
 
     if (!stamp) {
       return NextResponse.json(
@@ -75,9 +62,9 @@ export async function POST(request: NextRequest) {
 
     // Get user's stamp card
     const { data: stampCardData, error: cardError } = await supabase
-      .from("stamp-card")
+      .from(TABLES.STAMPCARDS)
       .select("*")
-      .eq("user_id", user_id)
+      .eq("auth_id", session.user.id)
       .single();
 
     if (cardError || !stampCardData) {
@@ -111,13 +98,13 @@ export async function POST(request: NextRequest) {
     };
 
     //update the stamp in the database
-    const { error: updateError } = await supabase
-      .from("stamp-card")
+    const { data : card, error: updateError } = await supabase
+      .from(TABLES.STAMPCARDS)
       .update({
         stamps: updatedStamps,
         num_stamps: stampCardData.num_stamps + 1,
       })
-      .eq("user_id", user_id);
+      .eq("auth_id", session.user.id);
 
     if (updateError) {
       return NextResponse.json(
@@ -125,6 +112,16 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // if update success, add a row to the stamp_log
+    const { error : logError } = await supabaseAdmin
+      .from(TABLES.LOG)
+      .insert({ auth_id : session.user.id });
+
+    if (logError) {
+      throw Error(logError.code);
+    }
+    
     // Return success message
     return NextResponse.json(
       { message: "Stamp added to stamp card" },
