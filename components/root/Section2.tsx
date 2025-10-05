@@ -28,14 +28,16 @@ export function StampProto(){
     )
 }
 
-export function StampCardProto({color="yellow-400", claim=true}) {
-  const stamps = Array(10).fill(
-    <div className="w-[257px] h-[22px] flex justify-center">
-      <div className="flex flex-row gap-[32px]">
-        <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat text-[10px] text-black px-[10px]">WORD</div>
-        <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat w-[98px] text-xs text-black">2025-07-12</div>
+export function StampCardProto({color=null, claim=true}) {
+  const stamps = Array.from({length: 10}).map((_, index) => {
+    return (
+      <div key={index} className="w-[257px] h-[22px] flex justify-center">
+        <div className="flex flex-row gap-[32px]">
+          <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat text-[10px] text-black px-[10px]">WORD</div>
+          <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat w-[98px] text-xs text-black">2025-07-12</div>
+        </div>
       </div>
-    </div>
+    )}
   );
 
   return (

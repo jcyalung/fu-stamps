@@ -1,15 +1,10 @@
 "use client"
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { Montserrat } from "next/font/google";
 import Image from "next/image";
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
-});
-
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { TABLES } from "@/constants";
+const supabase = createClientComponentClient();
 export default function LoginPage() {
   const { push } = useRouter();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,16 +14,19 @@ export default function LoginPage() {
     const payload = {
       email: event.currentTarget.email.value,
       password: event.currentTarget.password.value,
-      // constant verification and user id rn
-      verification: 2,
-      user_id: 0,
     }
+    const { data, error } = await supabase.auth.signInWithPassword({ email : event.currentTarget.email.value, password: event.currentTarget.password.value });
 
     try {
       const response = await axios.post("/api/auth/login", payload);
       if (response.status === 200) {
         // alerts the user that login was successful
         alert("Login successful");
+        const { data: userData } = await supabase
+        .from(TABLES.USERS)
+        .select('verification')
+        .eq('id', data.user?.id)
+        .single();
         push('/');
       }
     } catch (e : any) {
@@ -72,38 +70,38 @@ export default function LoginPage() {
               <form onSubmit={handleSubmit} className="flex flex-col items-center w-full">
 
                 <div className="flex flex-col mb-[48px] w-[280px]">
-                  <label htmlFor="email" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
+                  <label htmlFor="email" className={` text-black text-xs mb-[8px]`}>ENTER EMAIL </label>
                   <input
                     type="text"
                     id="email"
                     name="email"
                     required
-                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
+                    className={` border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black`}
                   />
                 </div>
 
                 <div className="flex flex-col mb-[48px] w-[280px]">
-                  <label htmlFor="password" className={`${montserrat.className} text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
+                  <label htmlFor="password" className={` text-black text-xs mb-[8px]`}>ENTER PASSWORD </label>
                   <input
                   //changed input type to password on some secure shi
                     type="password"
                     id="password"
                     name="password"
                     required
-                    className={`${montserrat.className} border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
+                    className={` border border-black rounded-full bg-lightyellow px-[15px] py-[8px] text-black tracking-wider`}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
+                  className={` bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
                 >
                   LOGIN
                 </button>
               </form>
  
-              <p className= {`${montserrat.className} text-black pt-10`}>Don't have an account?</p>
-              <button className={`${montserrat.className} bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 text-lg font-bold text-center`} onClick={() => {push('/register')}}> REGISTER</button>
+              <p className= {` text-black pt-10`}>Don't have an account?</p>
+              <button className={` bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 text-lg font-bold text-center`} onClick={() => {push('/register')}}> REGISTER</button>
             </div>
           </div>
         </div>

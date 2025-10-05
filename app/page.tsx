@@ -46,9 +46,9 @@ export default function Home() {
 
       <div className='flex flex-col items-center justify-start min-h-screen bg-lightyellow'>
         <div className={`flex gap-16 p-4 max-w-[90%] text-black justify-center items-center`}>
-          <p className='font-medium text-center text-4xl'>AS FUSION'S STUDY HOURS HAVE EXPANDED INTO THE ONLINE SPACE, THE STAMP CARD SYSTEM HAS TOO! 
-            FU-STAMPS WAS CREATED TO MAKE IT EASIER FOR MEMBERS TO TRACK THEIR STUDY HOUR PROGRESS, REDUCE STAMP FRAUD,
-            AND ENSURE FAIR PRIZE REDEMPTION. AFTER COLLECTING 10 STAMPS, YOU CAN REDEEM A BACON WRAPPED HOTDOG COUPON!
+          <p className='font-medium text-center leading-[3rem] text-4xl'>As FUSION'S Study Hours have expanded into the online space, the stamp card system has too! 
+            Fu-Stamps was created to make it easier for members to track their study hour progress, reduce stamp fraud,
+            and ensure fair prize redemption. After collecting 10 stamps, you can redeem a bacon wrapped hotdog coupon!
           </p>
           <ModalSelector />
         </div>

@@ -54,7 +54,7 @@ export async function GET(req: Request) {
       .filter('created_at::date', 'eq', currentDate)
       .single();
 
-      // if no existing stamp  is found
+      // if no existing stamp is found
     if (checkError && checkError.code !== "PGRST116") {
       throw new Error(checkError.message);
     }

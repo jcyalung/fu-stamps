@@ -11,13 +11,13 @@ export async function GET() {
   const cookieStore = (await cookies()) as any;
   const supabase = createRouteHandlerClient({cookies : () => cookieStore});
   const supabaseUser = createClientComponentClient();
-
   // connect to DB to sign out current user
   try {
+
     const { error } = await supabase.auth.signOut();
-    const { error: localStorageError } = await supabaseUser.auth.signOut();
+
     // if error occurs
-    if (error) {throw Error(error.message); }
+    if (error) {throw Error(error?.message); }
     else { 
       // otherwise return successful
       return NextResponse.json({message: "logged out successfully"}, {status:200});
