@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import page_image from '@/components/images/landing_page_section.png';
-import TitleTextbox from "@/components/TitleTextbox";
+import logo from '@/components/root/fusion_logo.png';
 import ModalSelector from "@/components/root/ModalSelector";
 import LogoBackground from "@/components/root/LogoBackground";
 import RewardBox from '@/components/root/reward_box.png';
@@ -61,28 +61,37 @@ export default function Home() {
 
       
       <div className="relative w-full min-h-screen bg-lightyellow">
-        
-        <LogoBackground />
-
-        {/* ts don't work so we'll get back to it later
-        <div className="relative flex flex-col md:flex-row items-start md:items-center w-full h-full px-8 md:px-16">
-          <div className="flex flex-col gap-16 md:w-1/2 mt-20">
-            <StampProto />
-            <HowItWorks />
-          </div>
-
-          <div className="flex flex-col items-center gap-16 md:w-1/2 mt-20">
-            <Image
-              src={RewardBox}
-              alt="hot_dog_reward"
-              className="p-6 rounded-2xl shadow-lg"
-            />
-            <div className="mt-auto">
-              <StampCardProto />
+            <div className="absolute left-[33vw] bottom-[16px] z-10">
+              <StampProto />
             </div>
-
-          </div> 
-        </div> */}
+            <div className="absolute left-[40vw] top-[12vh] z-10">
+              <HowItWorks />
+            </div>
+            <div className="absolute bottom-0 left-[79vw] z-10">
+              <Image
+                src={RewardBox}
+                alt="hot_dog_reward"
+                className="p-6 rounded-2xl"
+              />
+            </div>
+            <div className="absolute left-[13vw] top-[11vh] z-3">
+              <StampCardProto
+                color="yellow-400"
+              />
+            </div>
+            <div className="absolute left-[3vw] top-[28vh] z-1">
+              <StampCardProto
+                color="white"
+                claim={false}/>
+            </div>
+            <div className="absolute left-[vw] top-0 w-[90%] h-[90%] max-h-screen max-w-screen">
+              <Image
+                src={logo}
+                alt="logo"
+                fill
+                className="[animation:spin_5s_linear_infinite] object-contain" 
+              />
+            </div>
       </div>
       
 
