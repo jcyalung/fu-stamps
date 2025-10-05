@@ -64,7 +64,7 @@ export default function Home() {
             <div className="absolute left-[33vw] bottom-[16px] z-10">
               <StampProto />
             </div>
-            <div className="absolute left-[36vw] top-[17vh] z-10">
+            <div className="absolute left-[40vw] top-[12vh] z-10">
               <HowItWorks />
             </div>
             <div className="absolute bottom-0 left-[79vw] z-10">
@@ -75,18 +75,21 @@ export default function Home() {
               />
             </div>
             <div className="absolute left-[13vw] top-[11vh] z-3">
-              <StampCardProto />
+              <StampCardProto
+                color="yellow-400"
+              />
             </div>
             <div className="absolute left-[3vw] top-[28vh] z-1">
               <StampCardProto
                 color="white"
                 claim={false}/>
             </div>
-            <div className="absolute left-[13vw] top-0 w-[56vw] h-[56vw]">
+            <div className="absolute left-[vw] top-0 w-[90%] h-[90%] max-h-screen max-w-screen">
               <Image
                 src={logo}
                 alt="logo"
                 fill
+                className="[animation:spin_5s_linear_infinite] object-contain" 
               />
             </div>
       </div>

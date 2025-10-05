@@ -32,7 +32,7 @@ export function StampCardProto({color="yellow-400", claim=true}) {
   const stamps = Array(10).fill(
     <div className="w-[257px] h-[22px] flex justify-center">
       <div className="flex flex-row gap-[32px]">
-        <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat text-[10px] text-black px-[10px]">THIS LONG WORD</div>
+        <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat text-[10px] text-black px-[10px]">WORD</div>
         <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat w-[98px] text-xs text-black">2025-07-12</div>
       </div>
     </div>
@@ -41,7 +41,7 @@ export function StampCardProto({color="yellow-400", claim=true}) {
   return (
     <div className={`relative flex items-center bg-${color} shadow-lg w-[344px] h-[580px] border-1 border-b-6 border-r-4 border-black flex flex-col items-center`}>
         <h2 className="absolute right-[15px] top-[15px] text-black">&#10006;</h2>
-        <p className="flex flex-col gap-[25px] mt-[46px]">{stamps}</p>
+        <div className="flex flex-col gap-[25px] mt-[46px]">{stamps}</div>
         { claim ? 
         <div className="bg-lightyellow w-[166px] h-[37px] flex justify-center items-center text-black font-montserrat text-lg font-semibold border-1 border-b-4 border-r-2 mt-[25px]">
           CLAIM PRIZE
@@ -58,9 +58,9 @@ export function StampCardProto({color="yellow-400", claim=true}) {
 
 export function HowItWorks() {
   return (
-    <div className={`flex flex-col items-center bg-white text-black w-[960px] h-[580px] border-1 border-b-6 border-r-4 p-[32px] opacity-90`}>
-      <Image src={HOWITWORKS} alt="How It Works" className="w-[546px] h-auto" />
-      <ol className={`space-y-10 text-black mt-10 text-3xl uppercase font-extralight`}>
+    <div className={`flex flex-col items-center bg-white text-black w-[50vw] h-[30vw] max-w-[960px] max-h-[580px] border-1 border-b-6 border-r-4 p-[32px] opacity-90`}>
+      <Image src={HOWITWORKS} alt="How It Works" className="w-[60%] h-auto" />
+      <ol className={`space-y-10 text-black mt-4 text-[clamp(1rem,2vw,1.5rem)] uppercase font-extralight`}>
         <li className='italic'><span>Step 1:</span> Go to study hours online or in-person</li>
         <li className='italic'><span>Step 2:</span> Log into your FU-Stamps account</li>
         <li className='italic'><span>Step 3:</span> Enter the “Word of the Day” or check in with a director</li>
