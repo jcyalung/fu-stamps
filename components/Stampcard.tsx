@@ -1,36 +1,39 @@
 import type { StampType, StampProps } from "@/types/types";
 import Image from "next/image";
-import design from '@/components/images/design-stampcard.png';
-/*
+import design from "@/components/images/design-stampcard.png";
 
-StampType is defined as:
-export type StampType = {
-  id: number;
-  date: string;
-};
+export default function Stampcard({ stamps }: StampProps) {
+  return (
+    <div className="relative w-[28vw] h-auto">
+      <Image
+        src={design}
+        alt="Stamp Card Design"
+        className="object-cover rounded-lg"
+      />
 
-StampProps is defined as:
-export type StampProps = {
-    stamps: StampType[];
-}
-*/
-export default function Stampcard({stamps} : StampProps) {
-    return( 
-        <div className="relative w-[400px] h-[250px]">
-            <Image
-              src={design}
-              alt="Photo"
-              className="object-cover rounded-lg"
-              />
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* please tinker with the width and height. 
-                  please also make 10 copies for each stamp date, and comment the offsets for each date in the comments of your github request.
-              
-              */}
-              <p className="text-black text-xl font-bold px-4 py-2 rounded">
-                mm-dd
-              </p>
-            </div>
+      {/* stamps 1–5 */}
+      <div className="absolute left-[2vw] w-[24vw] bottom-[12vw] flex flex-row gap-[1.26vw]">
+        {stamps.slice(0, 5).map((stamp) => (
+          <p
+            key={stamp.id}
+            className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
+          >
+            {stamp.date}
+          </p>
+        ))}
+      </div>
+
+      {/* stamps 6–10 */}
+      <div className="absolute left-[2vw] w-[24vw] bottom-[7vw] flex flex-row gap-[1.26vw]">
+        {stamps.slice(5, 10).map((stamp) => (
+          <p
+            key={stamp.id}
+            className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
+          >
+            {stamp.date}
+          </p>
+        ))}
+      </div>
     </div>
-    )
+  );
 }
