@@ -16,7 +16,7 @@ export default function Stampcard({ stamps }: StampProps) {
         {stamps.slice(0, 5).map((stamp) => (
           <p
             key={stamp.id}
-            className="text-black italic text-[.9vw] border w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
+            className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
           >
             {stamp.date}
           </p>
