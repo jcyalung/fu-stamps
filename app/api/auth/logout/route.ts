@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/types/supabaseClient";
-import { COOKIE_NAME } from "@/constants";
 import { cookies } from "next/headers";
-import { createRouteHandlerClient, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 export async function GET() {
-
-  // we use route handler client to remove the cookies required
 
   // enforce any type so typescript doesnt scream
   const cookieStore = (await cookies()) as any;
   const supabase = createRouteHandlerClient({cookies : () => cookieStore});
-  const supabaseUser = createClientComponentClient();
+
   // connect to DB to sign out current user
   try {
 
