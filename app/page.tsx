@@ -76,7 +76,6 @@ export default function Home() {
             </div>
             <div className="absolute left-[13vw] top-[11vh] z-3">
               <StampCardProto
-                color="yellow-400"
               />
             </div>
             <div className="absolute left-[3vw] top-[28vh] z-1">

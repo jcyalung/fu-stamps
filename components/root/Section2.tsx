@@ -28,7 +28,7 @@ export function StampProto(){
     )
 }
 
-export function StampCardProto({color='yellow-400px', claim=true}) {
+export function StampCardProto({color='yellow-400', claim=true}) {
   const stamps = Array.from({length: 10}).map((_, index) => {
     return (
       <div key={index} className="w-[257px] h-[22px] flex justify-center">
