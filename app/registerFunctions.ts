@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import Email from '@/components/email';
 import { TABLES } from '@/constants';
 // Define constants for supabase client and verification link
-const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/api/verifyEmail";
+const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
 
 
 // Checks if the email and password are valid and returns appropiate error message and status codes accordingly
@@ -146,4 +146,48 @@ export async function updateVerificationCodes(user_id: number, code: string, exp
     }
 
     return { success: true }
+}
+
+export async function resendVerificationEmail(old_token : string) {
+    // retrieve user auth_id
+    const { data: user, error: userError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .select('auth_id')
+                    .eq('code', old_token)
+                    .single();
+
+    // delete code from table
+    const { error: deleteError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .delete({count : 'exact'})
+                    .eq('code', old_token);
+    
+    // align auth_id with email
+    const { data, error: emailError } = await supabaseAdmin 
+                    .from(TABLES.USERS)
+                    .select('email')
+                    .eq('auth_id', user!.auth_id)
+                    .single();
+
+    const { email } = data!;
+    
+    // generate new code
+    const new_token = crypto.randomBytes(32).toString('hex');
+    // update verification codes database
+    const expiration = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+    const { data : verificationData, error: verificationError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .insert({
+                        auth_id: user!.auth_id, 
+                        code: new_token, 
+                        expiration: expiration
+                    });
+    if (verificationError) {
+        console.log(verificationError);
+        return false;
+    }
+    
+    const result = await sendVerificationEmail(email, new_token);
+    if(result) { return true; }
+    else       { return false; }
 }

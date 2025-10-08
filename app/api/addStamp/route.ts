@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { COOKIE_NAME, TABLES } from "@/constants";
-import { verify } from "jsonwebtoken";
-import { supabase, supabaseAdmin } from "@/types/supabaseClient";
+import { TABLES } from "@/constants";
+import { supabaseAdmin } from "@/types/supabaseClient";
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-
 /**
  * This is an endpoint for adding a new stamp to a stampcard
  *
@@ -16,6 +15,8 @@ import { cookies } from "next/headers";
  * 500, any unknown error with database interaction
  */
 export async function POST(request: NextRequest) {
+  const cookieStore = (await cookies()) as any;
+  const supabase = createRouteHandlerClient({cookies : () => cookieStore});
   try {
     const {
       data : {session}
@@ -30,13 +31,13 @@ export async function POST(request: NextRequest) {
 
     const currentDate = new Date().toISOString().slice(0, 10);
 
-    //stamp verification
-    const { data: todayStampData, error: stampError } = await supabase
+    // stamp verification
+    const { data: todayStampData, error: stampError } = await supabaseAdmin
       .from(TABLES.STAMPS)
-      .select("word")
+      .select("*")
       .eq("created_at", currentDate)
       .single();
-
+    
     if (stampError || !todayStampData) {
       return NextResponse.json(
         { message: "There is no stamp for that day" },
@@ -64,7 +65,6 @@ export async function POST(request: NextRequest) {
     const { data: stampCardData, error: cardError } = await supabase
       .from(TABLES.STAMPCARDS)
       .select("*")
-      .eq("auth_id", session.user.id)
       .single();
 
     if (cardError || !stampCardData) {
@@ -75,12 +75,11 @@ export async function POST(request: NextRequest) {
     }
 
     const existingStamps = stampCardData.stamps || {};
-
     if (existingStamps[todayStampWord]) {
-      return NextResponse.json(
-        { message: "User has already stamped their card for the day" },
-        { status: 401 }
-      );
+       return NextResponse.json(
+         { message: "User has already stamped their card for the day" },
+         { status: 401 }
+       );
     }
 
     // Check if stamp card is full (10 stamps max)
@@ -94,40 +93,50 @@ export async function POST(request: NextRequest) {
     //adds new stamp to the stamps json
     const updatedStamps = {
       ...existingStamps,
-      [todayStampWord]: currentDate,
+      [todayStampWord] : currentDate,
     };
 
-    //update the stamp in the database
+    // update the stamp in the database
     const { data : card, error: updateError } = await supabase
       .from(TABLES.STAMPCARDS)
       .update({
         stamps: updatedStamps,
         num_stamps: stampCardData.num_stamps + 1,
       })
-      .eq("auth_id", session.user.id);
+      .eq("auth_id", session.user.id)
+      .select()
+      .single();
 
     if (updateError) {
       return NextResponse.json(
         { message: "Failed to update stamp card" },
         { status: 500 }
       );
-    }
+    } 
 
     // if update success, add a row to the stamp_log
     const { error : logError } = await supabaseAdmin
       .from(TABLES.LOG)
-      .insert({ auth_id : session.user.id });
+      .insert({ 
+        auth_id : session.user.id,
+        email : session.user.email,
+        card_id : card.card_id,
+      });
 
+    // error should only occur if duplicate stamp passes by
     if (logError) {
-      throw Error(logError.code);
+      throw Error(logError.message);
     }
     
     // Return success message
     return NextResponse.json(
-      { message: "Stamp added to stamp card" },
+      { 
+        message: "Stamp added to stamp card", 
+        num_stamps: card.num_stamps
+      },
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json({ error: error }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
