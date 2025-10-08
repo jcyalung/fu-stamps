@@ -1,58 +1,80 @@
-import Image from "next/image"
-export default function Email() {
-    const NAME = "<NAME>"; // replace with dynamic name fetching later
-    return (
-        <div className="flex flex-col items-center bg-white
-                        lg:w-[550px] lg:h-[624px]
-                        w-[280px] h-[596px]">
-            <div className="flex flex-col items-center mt-[26px] justify-center bg-[#FFFBEF]
-                            lg:w-[502px] lg:h-[141px]
-                            w-[258px] h-[101px]
-                            border-b-6 border-r-4 border-1 border-black">
-                <h1 className={`lg:text-4xl text-2xl text-center font-montserrat text-black
-                                lg:mt-[9px] mt-[14px]`}> 
-                    WELCOME TO
-                </h1>
-                <div className="relative w-[232px] lg:w-[415px] h-full">
-                    <Image
-                        src="/title.png"
-                        alt="logo"
-                        fill
-                        className="object-contain -mt-[10px]"
-                        sizes="(min-width: 1024px) 415px, 232px"
-                    />
-                </div>          
-            </div>
-            <p className={`lg:text-3xl text-2xl font-montserrat text-black italic font-light
-                                lg:mt-[59px] mt-[64px]
-                                lg:w-[492px] w-[229px]`}>
-                    HELLO {NAME},
-            </p>
-            <p className={`lg:text-lg text-sm font-montserrat text-black font-medium
-                                lg:w-[492px] w-[235px]
-                                lg:h-[171px] h-[215px]
-                                lg:mt-[11px] mt-[15px]`}>
-                    Yay! Thank you so much for registering an account with Fu-Stamps. Before getting started and stamping, let’s verify your email. 
-                    <br/>
-                    <br/>
-                    Click on the button below to continue with registration and login with your new account! This link will expire in a week.
-            </p>
-            <button className="flex justify-center items-center text-center
-                            lg:w-[443px] lg:h-[78px]
-                            w-[222px] h-[59px] bg-[#FBCA29] 
-                            border-b-6 border-r-4 border-1 border-black
-                            lg:mt-[50px] mt-[30px]
-                            hover:cursor-pointer">
-                <div className="relative w-[142px] h-[39px]
-                                lg:w-[283px] lg:h-[62px]">
-                    <Image
-                        src="/VERIFY.png"
-                        alt="verify email button"
-                        fill
-                        className="object-contain"
-                    />                
-                </div>
-            </button>    
-        </div>
-    )
+export default function Email(email: string, confirmationURL: string) {
+  return `
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:white; max-width:600px; margin:0 auto;">
+  
+  <!-- Header Box -->
+  <tr>
+    <td align="center" style="background-color:#FFFBEF; border-bottom:6px solid black; border-right:4px solid black; border:1px solid black; padding:20px;">
+      <h1 style="font-family:'Montserrat',sans-serif; font-size:24px; color:black; margin:0 0 10px 0;">
+        WELCOME TO
+      </h1>
+      <img src="https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/title.png" alt="logo" style="display:block; max-width:100%; height:auto;" />
+    </td>
+  </tr>
+
+  <!-- Greeting -->
+  <tr>
+    <td align="center" style="padding:20px 10px 0 10px; font-family:'Montserrat',sans-serif; font-size:20px; color:black; font-style:italic;">
+      HELLO ${email},
+    </td>
+  </tr>
+
+  <!-- Message -->
+  <tr>
+    <td align="center" style="padding:15px 10px 0 10px; font-family:'Montserrat',sans-serif; font-size:14px; color:black; font-weight:500; line-height:1.5;">
+      Yay! Thank you so much for registering an account with Fu-Stamps. Before getting started and stamping, let's verify your email.
+      <br /><br />
+      Click on the button below to continue with registration and login with your new account! This link will expire in a week.
+    </td>
+  </tr>
+
+  <!-- Verify Button -->
+  <tr>
+    <td align="center" style="padding:30px 10px 30px 10px;">
+      <a href="${confirmationURL}" target="_blank" style="background-color:#FBCA29; display:inline-block; padding:15px 30px; text-decoration:none; color:black; font-family:'Montserrat',sans-serif; border-bottom:6px solid black; border-right:4px solid black; border:1px solid black;">
+        <img src="https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/VERIFY.png" alt="verify email button" style="display:block; max-width:100%; height:auto;" />
+      </a>
+    </td>
+  </tr>
+
+</table>
+`;
 }
+
+
+/* export default function Email(email : string, confirmationURL : string) {
+    return (`
+            <div style="display:flex;flex-direction:row;align-items:center;background-color:white;width:280px;height:596px;">
+
+              <!-- Header Box -->
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:26px;background-color:#FFFBEF;width:258px;height:101px;border-bottom:6px solid black;border-right:4px solid black;border:1px solid black;">
+                <h1 style="font-family:'Montserrat',sans-serif;text-align:center;color:black;font-size:1.5rem;margin-top:14px;">
+                  WELCOME TO
+                </h1>
+                <div style="position:relative;width:232px;height:auto;margin-top:-10px;">
+                  <img src="https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/title.png" alt="logo" style="object-fit:contain;width:100%;height:100%;" />
+                </div>
+              </div>
+
+              <!-- Greeting -->
+              <p style="font-family:'Montserrat',sans-serif;color:black;font-style:italic;font-weight:300;font-size:1.5rem;width:229px;margin-top:64px;">
+                HELLO ${email},
+              </p>
+
+              <!-- Message -->
+              <p style="font-family:'Montserrat',sans-serif;color:black;font-weight:500;font-size:0.875rem;width:235px;height:215px;margin-top:15px;">
+                Yay! Thank you so much for registering an account with Fu-Stamps. Before getting started and stamping, let's verify your email.
+                <br /><br />
+                Click on the button below to continue with registration and login with your new account! This link will expire in a week.
+              </p>
+
+              <!-- Verify Button -->
+              <a href="${confirmationURL}" target="_blank" style="display:inline-flex;justify-content:center;align-items:center;text-align:center;background-color:#FBCA29;width:222px;height:59px;border-bottom:6px solid black;border-right:4px solid black;border:1px solid black;margin-top:30px;cursor:pointer;text-decoration:none;">
+                <img src="https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/VERIFY.png"
+                     alt="verify email button"
+                     style="object-fit:contain;width:142px;height:39px;" />
+              </a>
+
+            </div>`
+    )
+} */

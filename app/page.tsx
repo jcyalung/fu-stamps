@@ -3,11 +3,9 @@ import Image from "next/image";
 import page_image from '@/components/images/landing_page_section.png';
 import logo from '@/components/root/fusion_logo.png';
 import ModalSelector from "@/components/root/ModalSelector";
-import LogoBackground from "@/components/root/LogoBackground";
 import RewardBox from '@/components/root/reward_box.png';
 import { StampProto, StampCardProto, HowItWorks } from "@/components/root/Section2";
-import { getUpcomingStudySession, HOVER_STYLE, STUDY_HOURS } from "@/constants";
-const { dates, times } = STUDY_HOURS
+import { getUpcomingStudySession } from "@/constants";
 
 export default function Home() {
   const details = getUpcomingStudySession();

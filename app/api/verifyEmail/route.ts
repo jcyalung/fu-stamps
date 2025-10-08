@@ -26,14 +26,15 @@ export async function POST(request: Request) {
 
      
     // throw error if no verification code was found
-    if (codeError) { throw Error('No verification code was found'); }
+    if (codeError) { throw Error(codeError.code); }
 
     // delete code bc we dont need it before
-    const { data: deletedCode, error: deletedError } = await supabaseAdmin
+    const { error: deletedError } = await supabaseAdmin
       .from('verificationcodes')
       .delete()
       .eq('code', codeEntry.code);
     
+    if ( deletedError ) { throw Error(deletedError.code); }
     // checks if code expired
     const expiry = new Date(codeEntry.expiration).toISOString().slice(0,10);
     const current = new Date().toISOString().slice(0,10);
@@ -64,6 +65,7 @@ export async function POST(request: Request) {
         `Verified user ${updatedUser.email}!`
       }), {status: 200}
     );
+    
   } catch (err : any) {
     return new Response(
       JSON.stringify({error: err.message}), {status: 500}
