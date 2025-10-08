@@ -1,9 +1,11 @@
 import { createClient } from '@supabase/supabase-js';  // for supabase
 import nodemailer from 'nodemailer';  // for sending verification email
 import { supabase, supabaseAdmin } from '@/types/supabaseClient';
-
+import crypto from 'crypto';
+import Email from '@/components/email';
+import { TABLES } from '@/constants';
 // Define constants for supabase client and verification link
-const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/api/verifyEmail";
+const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
 
 
 // Checks if the email and password are valid and returns appropiate error message and status codes accordingly
@@ -49,20 +51,53 @@ export async function validateEmailPassword(email: string, password: string): Pr
 
 // registerUser returns if inserting the data was successfull, otherwise includes the error message
 export async function registerUser(email: string, password: string): Promise<{ success: boolean; data?: any; error?: string }> {
+
+    /* 
+    registering the user follows:
+        try to sign up the user in supabase auth
+        then send the verification email
+        update the users table with a 0 verification status
+`       add the token to the table
+    */
+    // try to sign up user
     const { data, error } = await supabase.auth.signUp({email, password});
+    
+    // if unsuccessful, return false
     if (error) {
-        return { success: false, error: error.code }
+        return ({ success: false, error: error.message });
     }
-    if (data) {
-        const result = await supabaseAdmin.from('users').insert({
-            auth_id: data.user!.id, // Supabase UUID
-            email: data.user!.email,
-            verification: 0, // optional, if you want your own tracking
-        });
+
+    const { data: userData, error: userError } = await supabaseAdmin
+                    .from(TABLES.USERS)
+                    .insert({
+                        auth_id: data.user?.id, 
+                        email: email
+                    });
+    if(userError) {
+        return { success: false, error: userError.message};
     }
     
+    const token = crypto.randomBytes(32).toString('hex');
+    const result = await sendVerificationEmail(email, token);
 
-    return { success: true, data }
+    if(!result) { return{ success: false, error: 'Verification email was not sent.'}; }
+
+    // update verification codes database
+    const expiration = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+    const { data : verificationData, error: verificationError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .insert({
+                        auth_id: data.user?.id, 
+                        code: token, 
+                        expiration: expiration
+                    });
+
+    // if error occurs during verification updates
+    if(verificationError) {
+        return { success: false, error: verificationError.message }
+    }
+
+    return { success: true, data };
 }
 
 
@@ -79,12 +114,17 @@ export async function sendVerificationEmail(to: string, token: string) {
         },
     });
 
-    await transporter.sendMail({
+    const { accepted, rejected } = await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: to,
-        subject: 'Verify your email',
-        html: `<p>Thank you for registering for Fu-Stamps! Click <a href="${EMAIL_LINK}">here</a> to verify your email.</p>`,
+        subject: 'Verify your Fu-Stamps Email',
+        html: Email(to, EMAIL_LINK),
     });
+
+    if(accepted) { return true; }
+    else {
+        return false;
+    }
 }
 
 
@@ -106,4 +146,48 @@ export async function updateVerificationCodes(user_id: number, code: string, exp
     }
 
     return { success: true }
+}
+
+export async function resendVerificationEmail(old_token : string) {
+    // retrieve user auth_id
+    const { data: user, error: userError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .select('auth_id')
+                    .eq('code', old_token)
+                    .single();
+
+    // delete code from table
+    const { error: deleteError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .delete({count : 'exact'})
+                    .eq('code', old_token);
+    
+    // align auth_id with email
+    const { data, error: emailError } = await supabaseAdmin 
+                    .from(TABLES.USERS)
+                    .select('email')
+                    .eq('auth_id', user!.auth_id)
+                    .single();
+
+    const { email } = data!;
+    
+    // generate new code
+    const new_token = crypto.randomBytes(32).toString('hex');
+    // update verification codes database
+    const expiration = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+    const { data : verificationData, error: verificationError } = await supabaseAdmin
+                    .from(TABLES.VERIFICATION_CODES)
+                    .insert({
+                        auth_id: user!.auth_id, 
+                        code: new_token, 
+                        expiration: expiration
+                    });
+    if (verificationError) {
+        console.log(verificationError);
+        return false;
+    }
+    
+    const result = await sendVerificationEmail(email, new_token);
+    if(result) { return true; }
+    else       { return false; }
 }

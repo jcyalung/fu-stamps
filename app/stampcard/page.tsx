@@ -2,13 +2,18 @@
 
 import axios, { AxiosError } from "axios";
 import Stampcard from "@/components/Stampcard";
-import type { StampType, StampProps } from "@/types/types";
-
-const exStamp: StampType = {id:1, date:'09-28'};
-const stamp : StampType = {id:1, date:'mm-dd'};
-const stamps : StampType[] = [stamp, stamp, stamp];
-export default function Home() {
-
+import type { StampProps } from "@/types/types";
+import { useState, useEffect } from "react";
+export default function StampcardPage() {
+  const [stamps, setStamps] = useState<StampProps>({});
+  const [cardID, setCardID] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchStamps = async () => {
+      const { data } = await axios.get("/api/getStampCard");
+      setStamps(data.message);
+    };
+    fetchStamps();
+  }, []);
   return (
     <main>
         <Stampcard stamps={stamps}/>

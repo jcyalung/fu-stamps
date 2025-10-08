@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         // throw error from inserting into the database
         if (!reg.success) { throw Error(reg.error) };
 
-       return NextResponse.json({message: "success"}, {status: 200});
+       return NextResponse.json({message: `Successfully registered ${email}!`}, {status: 200});
 
     // catch any other errors
     } catch (error: any) {

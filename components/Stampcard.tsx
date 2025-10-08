@@ -1,8 +1,13 @@
-import type { StampType, StampProps } from "@/types/types";
+import type { StampProps } from "@/types/types";
 import Image from "next/image";
 import design from "@/components/images/design-stampcard.png";
 
-export default function Stampcard({ stamps }: StampProps) {
+type StampcardProps = {
+  stamps: StampProps;
+};
+
+export default function Stampcard({ stamps }: StampcardProps) {
+  console.log(stamps);
   return (
     <div className="relative w-[28vw] h-auto">
       <Image
@@ -12,28 +17,35 @@ export default function Stampcard({ stamps }: StampProps) {
       />
 
       {/* stamps 1–5 */}
+      { stamps ? 
       <div className="absolute left-[2vw] w-[24vw] bottom-[12vw] flex flex-row gap-[1.26vw]">
-        {stamps.slice(0, 5).map((stamp) => (
+        {Object.entries(stamps).slice(0, 5).map((stamp, index) => (
           <p
-            key={stamp.id}
+            key={index}
             className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
           >
-            {stamp.date}
+            {stamp[1].substring(5)}
           </p>
         ))}
       </div>
+      : null}
+      
 
       {/* stamps 6–10 */}
+      { stamps ?
       <div className="absolute left-[2vw] w-[24vw] bottom-[7vw] flex flex-row gap-[1.26vw]">
-        {stamps.slice(5, 10).map((stamp) => (
+        {Object.entries(stamps).slice(5, 10).map((stamp,index) => (
           <p
-            key={stamp.id}
+            key={index}
             className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
           >
-            {stamp.date}
+            {stamp[1]}
           </p>
         ))}
       </div>
+       :
+      null}
+      
     </div>
   );
 }

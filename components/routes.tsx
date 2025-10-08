@@ -1,6 +1,8 @@
 export const GUESTROUTES = {
                                 '/login': 'LOGIN', 
+                                '/register': 'REGISTER',
                                 '/about': 'ABOUT',
+                                
                             };
 
 

@@ -1,5 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-import { verify } from 'jsonwebtoken';
 import { cookies, headers } from 'next/headers';
 import { COOKIE_NAME, TABLES } from "@/constants";
 import { NextResponse } from 'next/server';
@@ -9,8 +7,7 @@ import { supabaseAdmin } from '@/types/supabaseClient';
 export async function GET(request: Request) {
     try {
         const cookieStore = (await cookies()) as any;
-        const headerStore = (await headers()) as any;
-        const supabase = createRouteHandlerClient({ cookies : () => { return cookieStore }});
+         const supabase = createRouteHandlerClient({ cookies : () => { return cookieStore }});
 
         const {
           data: { user },
