@@ -1,4 +1,5 @@
-export const GUESTROUTES = {
+export type RouteProps = Record<string, string>;
+export const GUESTROUTES : RouteProps = {
                                 '/login': 'LOGIN', 
                                 '/register': 'REGISTER',
                                 '/about': 'ABOUT',
@@ -6,14 +7,14 @@ export const GUESTROUTES = {
                             };
 
 
-export const MEMBERROUTES = {
+export const MEMBERROUTES : RouteProps = {
                                 '/stampcard': 'STAMP CARD', 
                                 '/profile': 'PROFILE',
                                 '/about': 'ABOUT',
                             };
 
 
-export const ACADEMICSROUTES = {
+export const ACADEMICSROUTES : RouteProps = {
                                 '/stamp': 'STAMP', 
                                 '/attendance': 'ATTENDANCE LOG', 
                                 '/profile': 'PROFILE',

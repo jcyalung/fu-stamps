@@ -7,7 +7,6 @@ type StampcardProps = {
 };
 
 export default function Stampcard({ stamps }: StampcardProps) {
-  console.log(stamps);
   return (
     <div className="relative w-[28vw] h-auto">
       <Image
@@ -39,7 +38,7 @@ export default function Stampcard({ stamps }: StampcardProps) {
             key={index}
             className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded h-[2vw] flex items-center justify-center"
           >
-            {stamp[1]}
+            {stamp[1].substring(5)}
           </p>
         ))}
       </div>

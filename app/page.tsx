@@ -6,9 +6,29 @@ import ModalSelector from "@/components/root/ModalSelector";
 import RewardBox from '@/components/root/reward_box.png';
 import { StampProto, StampCardProto, HowItWorks } from "@/components/root/Section2";
 import { getUpcomingStudySession } from "@/constants";
+import Stampcard from "@/components/Stampcard";
+const stamps1 = { 
+    "1" : "2025-10-10",
+    "2" : "2025-10-11",
+    "3" : "2025-10-12",
+    "4" : "2025-10-13",
+  }
+  const stamps2 = { 
+    "1" : "2025-10-10",
+    "2" : "2025-10-11",
+    "3" : "2025-10-12",
+    "4" : "2025-10-14",
+    "5" : "2025-10-15",
+    "6" : "2025-10-16",
+    "7" : "2025-10-17",
+    "8" : "2025-10-18",
+    "9" : "2025-10-19",
+    "10" : "2025-10-20",
+  }
 
 export default function Home() {
   const details = getUpcomingStudySession();
+  
   return (
     <main>
       <div className='flex flex-col items-center justify-center min-w-screen min-h-screen bg-lightyellow'>
@@ -72,14 +92,11 @@ export default function Home() {
                 className="p-6 rounded-2xl"
               />
             </div>
-            <div className="absolute left-[13vw] top-[11vh] z-3">
-              <StampCardProto
-              />
+            <div className="absolute left-[11vw] top-[11vh] z-3">
+              <Stampcard stamps={stamps1}/>
             </div>
-            <div className="absolute left-[3vw] top-[28vh] z-1">
-              <StampCardProto
-                color="white"
-                claim={false}/>
+            <div className="absolute left-[3vw] top-[36vh] z-1">
+              <Stampcard stamps={stamps2}/>
             </div>
             <div className="absolute left-[vw] top-0 w-[90%] h-[90%] max-h-screen max-w-screen">
               <Image
