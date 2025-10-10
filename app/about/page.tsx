@@ -8,7 +8,7 @@ export default function AboutPage() {
         <TitleTextbox>
           ABOUT FU-STAMPS
         </TitleTextbox>
-        <p className="items-center justify-center text-center text-black italic text-[clamp(1rem,4vw,2rem)]"> 
+        <p className="items-center justify-center text-center text-black italic text-[clamp(0.5rem,4vw,1.5rem)]"> 
           FU-STAMPS, A WEBSITE FOR FUSION STUDY HOUR STAMP CARDS. 
           AS FUSION’S STUDY HOURS HAVE EXPANDED INTO THE ONLINE SPACE, 
           THE STAMP CARD SYSTEM HAS TOO. FU-STAMPS WAS CREATED TO MAKE IT EASIER FOR MEMBERS TO TRACK THEIR STUDY HOUR PROGRESS,

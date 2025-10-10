@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import GuestHeader from "./GuestHeader";
-import AcademicsHeader from "./AcademicsHeader";
-import MemberHeader from "./MemberHeader";
+import Header from "./Header";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { TABLES } from "@/constants";
 
@@ -41,8 +39,5 @@ export default function HeaderSelector() {
             subscription.subscription.unsubscribe();
         }
     }, [supabase]);
-    //console.log(verification);
-    if(verification == 2) { return <AcademicsHeader />;}
-    if(verification == 1) { return <MemberHeader />;}
-    return <GuestHeader />;
+    return <Header verification={verification} />
 }
