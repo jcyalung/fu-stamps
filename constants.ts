@@ -97,3 +97,37 @@ export const montserrat_global = Montserrat({
 
 // import this to add pop out hovers to buttons
 export const HOVER_STYLE = "transform transition-transform duration-300 hover:scale-105 hover:shadow-xl";
+
+export type CreatorProps = { name? : string, image? : string, position? : string, github? : string}
+export const CREATOR_TEAM : CreatorProps[] = [
+  {
+    name: "Joshua Yalung",	
+    image: "https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/Josh.JPG",
+    position: "Lead", 
+    github: "http://github.com/jcyalung/",
+  },
+  { 
+    name: "Kailee Kaocharoen",	
+    image: "https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/Kailee.jpg",
+    position: "Designer, Developer", 
+    github: "https://github.com/kaileetea",
+  },
+  {
+    name: "Ythan Hernandez",	
+    image: "https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/Ythan.jpg",
+    position: "Developer",
+    github: "https://github.com/ythan-h",
+  },
+  {
+    name: "Derrick Thrower",
+    image: "https://odcuppltcnwouhdtvujd.supabase.co/storage/v1/object/public/img_bucket/Derrick.jpeg",
+    position: "Developer", 
+    github: "https://github.com/DerrickThrower",
+  },
+  {
+    name: "Harrison Tran",
+    image: "",
+    position: "Developer", 
+    github: "https://github.com/harrisonharrisonharrison",
+  }
+];

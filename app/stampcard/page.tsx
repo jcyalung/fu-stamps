@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 export default function StampcardPage() {
   const [stamps, setStamps] = useState<StampProps>({});
   const [cardID, setCardID] = useState<string | null>(null);
+  
   useEffect(() => {
     const fetchStamps = async () => {
       const { data } = await axios.get("/api/getStampCard");
@@ -14,6 +15,7 @@ export default function StampcardPage() {
     };
     fetchStamps();
   }, []);
+
   return (
     <main>
         <Stampcard stamps={stamps}/>
