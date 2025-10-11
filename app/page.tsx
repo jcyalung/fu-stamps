@@ -77,8 +77,13 @@ export default function Home() {
 
 
       
-      <div className="relative w-full min-h-screen bg-lightyellow">
-            <div className="absolute left-[33vw] bottom-[16px] z-10">
+      <div className="relative w-full min-h-[100vh] bg-lightyellow">
+            <div className="absolute z-10
+            left-[10vw] bottom-[2rem]
+            sm:left-[20vw] sm:bottom-[3rem]
+            md:left-[25vw] md:bottom-[4rem]
+            lg:left-[33vw] lg:bottom-[4rem]
+            xl:left-[35vw] xl:bottom-[4rem]">
               <StampProto />
             </div>
             <div className="absolute left-[40vw] top-[12vh] z-10">
@@ -97,12 +102,23 @@ export default function Home() {
             <div className="absolute left-[3vw] top-[36vh] z-1">
               <Stampcard stamps={stamps2}/>
             </div>
-            <div className="absolute left-[vw] top-0 w-[90%] h-[90%] max-h-screen max-w-screen">
+            <div
+              className="
+                absolute
+                top-[5%] left-[5%]       /* default small screens */
+                sm:top-[5%] sm:left-[10%]
+                md:top-[10%] md:left-[15%]
+                lg:top-[12%] lg:left-[20%]
+                w-[clamp(150px,60vw,700px)]
+                h-[clamp(150px,60vw,700px)]
+                max-w-full max-h-screen
+              "
+            >
               <Image
                 src={logo}
                 alt="logo"
                 fill
-                className="[animation:spin_5s_linear_infinite] object-contain" 
+                className="[animation:spin_5s_linear_infinite] object-contain"
               />
             </div>
       </div>
