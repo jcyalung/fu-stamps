@@ -67,3 +67,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
 }
+
+@keyframes sparkle {
+  0%, 100% { box-shadow: 0 0 10px 4px #facc15, 0 0 10px 5px #fde68a; }
+  50% { box-shadow: 0 0 20px 10px #fef08a, 0 0 20px 10px #fcd34d; }
+}
+
+.sparkle {
+  animation: sparkle 1.5s infinite alternate;
+  position: relative;
+}

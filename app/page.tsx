@@ -4,7 +4,7 @@ import page_image from '@/components/images/landing_page_section.png';
 import logo from '@/components/root/fusion_logo.png';
 import ModalSelector from "@/components/root/ModalSelector";
 import RewardBox from '@/components/root/reward_box.png';
-import { StampProto, StampCardProto, HowItWorks } from "@/components/root/Section2";
+import { StampProto, HowItWorks } from "@/components/root/Section2";
 import { getUpcomingStudySession } from "@/constants";
 import Stampcard from "@/components/Stampcard";
 import TitleTextbox from "@/components/TitleTextbox";
@@ -15,16 +15,16 @@ const stamps1 = {
     "4" : "2025-10-13",
   }
   const stamps2 = { 
-    "1" : "2025-10-10",
-    "2" : "2025-10-11",
-    "3" : "2025-10-12",
-    "4" : "2025-10-14",
-    "5" : "2025-10-15",
-    "6" : "2025-10-16",
-    "7" : "2025-10-17",
-    "8" : "2025-10-18",
-    "9" : "2025-10-19",
-    "10" : "2025-10-20",
+      "1" : "2025-10-10",
+      "2" : "2025-10-11",
+      "3" : "2025-10-12",
+      "4" : "2025-10-14",
+      "5" : "2025-10-15",
+      "6" : "2025-10-16",
+      "7" : "2025-10-17",
+      "8" : "2025-10-18",
+      "9" : "2025-10-19",
+      "10" : "2025-10-20",
   }
 
 export default function Home() {

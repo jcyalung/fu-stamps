@@ -18,7 +18,9 @@ export default function StampcardPage() {
 
   return (
     <main>
+      <div className='flex justify-center items-center min-h-[80vh]'>
         <Stampcard stamps={stamps}/>
+      </div>
     </main>
   );
 }

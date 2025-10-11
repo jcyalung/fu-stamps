@@ -8,13 +8,14 @@ type StampcardProps = {
 
 export default function Stampcard({ stamps }: StampcardProps) {
   return (
-    <div className="relative w-[28vw] h-auto">
+    <div 
+    className={`relative w-[28vw] h-auto rounded-lg transition-all duration-300  
+    ${stamps && Object.keys(stamps).length === 10 ? 'ring-20 ring-yellow-400 ring-offset-2 sparkle' : ''}`}>
       <Image
         src={design}
         alt="Stamp Card Design"
         className="object-cover rounded-lg"
       />
-
       {/* stamps 1–5 */}
       { stamps ? 
       <div className="absolute left-[2vw] w-[24vw] bottom-[12vw] flex flex-row gap-[1.26vw]">
