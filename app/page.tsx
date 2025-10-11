@@ -7,6 +7,7 @@ import RewardBox from '@/components/root/reward_box.png';
 import { StampProto, StampCardProto, HowItWorks } from "@/components/root/Section2";
 import { getUpcomingStudySession } from "@/constants";
 import Stampcard from "@/components/Stampcard";
+import TitleTextbox from "@/components/TitleTextbox";
 const stamps1 = { 
     "1" : "2025-10-10",
     "2" : "2025-10-11",
@@ -41,30 +42,28 @@ export default function Home() {
         priority
         />
 
-        <a href='/stampcard' className={`transform transition-transform duration-300 hover:scale-105 mt-10 inline-flex px-[80px] py-[4px] justify-end items-center border border-black bg-[#FBCA29] shadow-[4px_6px_0_0_#000000]`}>
-            <h1 
-              className={`text-center text-white text-[48px] font-extrabold tracking-[3.2px] break-words font-['Verdana',monospace]`}
-              style={{
-                WebkitTextStroke: '1px black',
-              }}
-            >
+        <a href='/stampcard' 
+           className={`transform transition-transform duration-300 hover:scale-105`}
+        // mt-10 inline-flex px-[80px] py-[4px] justify-end items-center border border-black bg-[#FBCA29] shadow-[4px_6px_0_0_#000000]
+        >
+            <TitleTextbox>
               START STAMPING TODAY
-            </h1>
+              </TitleTextbox>
         </a>
       </div>
 
-      <div className='flex flex-col items-center justify-center min-w-screen min-h-screen bg-lightyellow'>
-        <div className='flex gap-16 p-4 min-w-screen h-[50px] bg-yellowunderline border-2 border-black justify-center items-center'>
-          <span className={`font-bold text-3xl text-black px-2`}>{details.name}</span>
-          <span className={`font-bold text-3xl text-black px-2`}>{details.label}, {details.mmdd}</span>
-          <span className={`font-bold text-3xl text-black px-2`}>{details.time}</span>
-          <span className={`font-bold text-3xl text-black px-2`}>LOCATION: {details.location}</span>
+      <div className='flex flex-col items-center justify-center w-screen h-[50vh] bg-lightyellow'>
+        <div className='flex flex-wrap justify-center items-center gap-6 sm:gap-12 p-4 bg-yellowunderline border-2 border-black w-full'>
+          <span className={`font-bold text-center text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl text-black px-2`}>{details.name}</span>
+          <span className={`font-bold text-center text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl text-black px-2`}>{details.label}, {details.mmdd}</span>
+          <span className={`font-bold text-center text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl text-black px-2`}>{details.time}</span>
+          <span className={`font-bold text-center text-2xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl text-black px-2`}>LOCATION: {details.location}</span>
         </div>
       </div>
 
       <div className='flex flex-col items-center justify-start min-h-screen bg-lightyellow'>
-        <div className={`flex gap-16 p-4 max-w-[90%] text-black justify-center items-center`}>
-          <p className='font-medium text-center leading-[3rem] text-4xl'>As FUSION'S Study Hours have expanded into the online space, the stamp card system has too! 
+        <div className={`flex flex-wrap gap-16 p-4 min-w-[10%] max-w-[80%] text-black justify-center items-center`}>
+          <p className='font-medium text-center leading-[clamp(2rem, 4vw, 3.5rem)] text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-4xl'>As FUSION'S Study Hours have expanded into the online space, the stamp card system has too! 
             Fu-Stamps was created to make it easier for members to track their study hour progress, reduce stamp fraud,
             and ensure fair prize redemption. After collecting 10 stamps, you can redeem a bacon wrapped hotdog coupon!
           </p>

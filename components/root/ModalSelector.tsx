@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AcademicsModal, MemberModal, GuestModal } from "./Modals";
+import { RootModal } from "./RootModal";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { TABLES } from "@/constants";
 
@@ -16,7 +16,6 @@ export default function ModalSelector() {
         } = await supabase.auth.getSession();
         // no session was found
         if(!session) {
-            console.log(sessionError);
             setVerification(0);
             return;
         }
@@ -39,8 +38,5 @@ export default function ModalSelector() {
             subscription.subscription.unsubscribe();
         }
     }, [supabase]);
-    //console.log(verification);
-    if(verification == 2) { return <AcademicsModal />;}
-    if(verification == 1) { return <MemberModal />;}
-    return <GuestModal />;
+    return <RootModal verification={verification} />
 }
