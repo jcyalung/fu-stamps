@@ -18,6 +18,7 @@ export default function Stampcard({ stamps }: StampcardProps) {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isAdding, setIsAdding]       = useState(false);
   const [stampInput, setStampInput]   = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Use SWR to fetch the stamp card. The API returns the stamps object as `message`.
   const { data: displayStamps, error, isLoading } = useSWR<StampProps | null>(
@@ -45,6 +46,13 @@ export default function Stampcard({ stamps }: StampcardProps) {
         console.log(stampsToShow);
         const response = await axios.post('/api/addStamp', { stamp: input });
         toast.success('Stamp added for today!');
+        // revalidate the getStampCard cache so UI updates
+        await mutate('/api/getStampCard');
+      }
+      else if(e == 2) {
+        console.log('claiming reward');
+        const response = await axios.get('/api/reward');
+        toast.success('Reward sent!');
         // revalidate the getStampCard cache so UI updates
         await mutate('/api/getStampCard');
       }
@@ -157,7 +165,7 @@ export default function Stampcard({ stamps }: StampcardProps) {
                 ev.stopPropagation();
                 // if card full they will redeem, otherwise start adding flow
                 if (Object.entries(stampsToShow).length === 10) {
-                  handleClick(1);
+                  setShowConfirm(true);
                 } else {
                   setIsAdding(true);
                   setShowOverlay(true);
@@ -168,6 +176,43 @@ export default function Stampcard({ stamps }: StampcardProps) {
             </button>
           )}
         </div>
+        <div
+  className={`
+    fixed inset-0 flex items-center justify-center z-50
+    transition-opacity duration-300
+    ${showConfirm ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+    bg-black/50
+  `}
+>
+  <div
+    className={`
+      bg-white rounded-lg p-6 w-[80%] sm:w-[400px] text-center text-black shadow-lg transform transition-transform duration-300
+      ${showConfirm ? "scale-100" : "scale-90"}
+    `}
+  >
+    <h2 className="text-[clamp(1rem,6vh,2rem)] font-bold mb-4">Confirm Reward</h2>
+    <p className="mb-[3vh] text-[clamp(0.25rem,3vh,1rem)]">Are you sure you want to redeem your reward?</p>
+    <p className="mb-[4vh] text-[clamp(0.25rem,3vh,1rem)] text-red-500">This action will delete your current card.</p>
+    <div className="flex justify-center gap-4">
+      <button
+        className="px-4 py-2 text-[clamp(0.75rem,6vh,1.5rem)] bg-green-500 rounded hover:bg-green-600 cursor-pointer"
+        onClick={async () => {
+          setShowConfirm(false);
+          await handleClick(2); // Redeem action
+        }}
+      >
+        Yes
+      </button>
+      <button
+        className="px-4 py-2 text-[clamp(0.75rem,6vh,1.5rem)] bg-red-500 rounded hover:bg-red-600 cursor-pointer"
+        onClick={() => setShowConfirm(false)}
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
       </div>
     );
   }
