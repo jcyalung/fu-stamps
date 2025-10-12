@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import Email from '@/components/email';
 import { TABLES } from '@/constants';
 // Define constants for supabase client and verification link
-const VERIFICATION_URL = process.env.VERIFICATION_URL || "http://localhost:3000/verify";
+const VERIFICATION_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000/verify";
 
 
 // Checks if the email and password are valid and returns appropiate error message and status codes accordingly
@@ -104,7 +104,7 @@ export async function registerUser(email: string, password: string): Promise<{ s
 // sendVerificationEmail uses nodemailer to send a verification email to the new user
 export async function sendVerificationEmail(to: string, token: string) {
     // Hardcoded email link and verification url
-    const EMAIL_LINK = VERIFICATION_URL + "?token=" + token;
+    const EMAIL_LINK = `${VERIFICATION_URL}/verify?token=${token}`;
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',

@@ -100,8 +100,7 @@ export default function LoginPage() {
                 </button>
               </form>
  
-              <p className= {` text-black pt-10`}>Don't have an account?</p>
-              <button className={` bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 text-lg font-bold text-center`} onClick={() => {push('/register')}}> REGISTER</button>
+              <a href='/register' className={`underline text-black pt-10`}>Don't have an account?</a>
             </div>
           </div>
         </div>

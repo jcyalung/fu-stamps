@@ -52,7 +52,7 @@ export default function Stampcard({ stamps }: StampcardProps) {
       else if(e == 2) {
         console.log('claiming reward');
         const response = await axios.get('/api/reward');
-        toast.success('Reward sent!');
+        toast.success('Reward sent! Check your inbox.');
         // revalidate the getStampCard cache so UI updates
         await mutate('/api/getStampCard');
       }
