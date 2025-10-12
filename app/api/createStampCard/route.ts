@@ -1,8 +1,7 @@
-import { cookies, headers } from 'next/headers';
-import { COOKIE_NAME, TABLES } from "@/constants";
+import { cookies } from 'next/headers';
+import { TABLES } from "@/constants";
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { supabaseAdmin } from '@/types/supabaseClient';
 
 export async function GET(request: Request) {
     try {
@@ -31,7 +30,7 @@ export async function GET(request: Request) {
         if(existingCard) {
             throw new Error("A stamp card already exists for this user!");
         }
-         // 6. Insert a new stamp card for the user
+        // 6. Insert a new stamp card for the user
         const { error: insertError } = await supabase
           .from(TABLES.STAMPCARDS)
           .insert({auth_id});
@@ -40,9 +39,16 @@ export async function GET(request: Request) {
         if (insertError) {
             throw new Error(insertError.message);
         }
-
+        
+        const { data : card, error: newCardError } = await supabase
+          .from(TABLES.STAMPCARDS)
+          .select('*')
+          .single();
+        const { card_id, stamps, num_stamps } = card;
         // return success response
-        return NextResponse.json({ message: `Stamp card created for user ${email}` }, { status: 200 });
+        return NextResponse.json(
+          { message: {card_id, stamps , num_stamps} }, 
+          { status: 200 });
     } catch (error: any) {
         return NextResponse.json({message: error.message}, {status : 500})
     }

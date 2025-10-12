@@ -3,7 +3,7 @@ import "./globals.css";
 import { montserrat_global as montserrat } from "@/constants";
 import Footer from "@/components/footer";
 import HeaderSelector from "@/components/headers/HeaderSelector";
-
+import { Toaster } from "react-hot-toast";
 export const metadata: Metadata = {
   title: "Fu-Stamps",
   description: "Stamp your cards online!",
@@ -23,8 +23,10 @@ export default function RootLayout({
         <header className='fixed top-0 left-0 w-[100vw] shadow z-50'>
           <HeaderSelector />
         </header>
+        
         <div className='pt-20 bg-lightyellow'>
         {children}
+        <Toaster position="top-center" reverseOrder={false} />
         </div>
 
         <footer>
