@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { COOKIE_NAME, TABLES } from '@/constants';
+import { TABLES } from '@/constants';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-
+import crypto from 'crypto';
 export async function GET(request: Request) {
   try {
     // parses cookies
@@ -58,8 +58,20 @@ export async function GET(request: Request) {
         error: 'Failed to delete stamp card',
       }, { status: 500 });
     }
-
-    return NextResponse.json({ success: 'Successfully deleted stamp card' }, { status: 200 });
+    const code = crypto.randomBytes(32).toString('hex');
+    const auth_id  = user.id;
+    let expiration = new Date(); 
+    expiration.setDate(expiration.getDate() + 30);
+    const { data : reward, error : rewardError } = await supabase
+      .from(TABLES.REWARDS)
+      .insert({auth_id, expiration, code});
+    if(rewardError) {
+      console.log(rewardError);
+      return NextResponse.json({
+        error: 'Failed to add reward',
+      }, { status: 500});
+    }
+    return NextResponse.json({ success: 'Successfully deleted stamp card and reward added' }, { status: 200 });
 
   } catch (err : any) {
     return NextResponse.json({
