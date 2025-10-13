@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div className="absolute top-[17.72vh] left-1/2 z-0">
           <div className="flex flex-col items-center">
             <Image
-              src="/title.png"
+              src="/title-xl.png"
               alt="FU Stamps Title"
               width={731}
               height={50}
@@ -94,7 +94,7 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  className={` bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
+                  className={` btn bg-[#FBCA29] text-black hover:cursor-pointer w-[115px] h-[56px] border-1 border-b-4 border-r-2 px-[24px] text-lg font-semibold`}
                 >
                   LOGIN
                 </button>

@@ -24,7 +24,7 @@ export default function RootLayout({
           <HeaderSelector />
         </header>
         
-        <div className='pt-20 bg-lightyellow'>
+        <div className='pt-[8vh] bg-lightyellow'>
         {children}
         <Toaster position="top-center" reverseOrder={false} />
         </div>

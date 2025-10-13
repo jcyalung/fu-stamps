@@ -235,5 +235,4 @@ export default function Stampcard({ stamps }: StampcardProps) {
       </div>
     )
   }
-  
 }

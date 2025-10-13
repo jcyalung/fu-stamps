@@ -77,3 +77,9 @@ body {
   animation: sparkle 1.5s infinite alternate;
   position: relative;
 }
+
+.btn:active {
+  transform: scale(0.95) translateY(3px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3) inset;
+  transition: transform 0.1s ease, box-shadow
+}

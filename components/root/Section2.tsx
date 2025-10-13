@@ -1,5 +1,11 @@
 import HOWITWORKS from "@/components/root/HOW IT WORKS.png"; 
 import Image from "next/image";
+import design from "@/components/images/design-stampcard.png";
+import template from "@/components/images/stampcard-template.png";
+import { HOVER_STYLE } from '@/constants';
+import { useState } from "react";
+import type { StampProps } from "@/types/types";
+
 export function StampProto(){
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); };
     return (
@@ -49,34 +55,100 @@ export function StampProto(){
     )
 }
 
-export function StampCardProto({color='yellow-400', claim=true}) {
-  const stamps = Array.from({length: 10}).map((_, index) => {
+type StampcardProps = {
+  stamps: StampProps | null;
+};
+export function StampCardProto({ stamps }: StampcardProps) {
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  // fall back to initial prop when SWR hasn't loaded yet
+  const stampsToShow = stamps ?? null;
+
+  const handleClick = async (e : number) => { console.log(`button clicked with ${e}`) }
+  if (stampsToShow !== null) {
     return (
-      <div key={index} className="w-[257px] h-[22px] flex justify-center">
-        <div className="flex flex-row gap-[32px]">
-          <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat text-[10px] text-black px-[10px]">WORD</div>
-          <div className="flex items-center justify-center rounded-4xl border-1 bg-lightyellow font-montserrat w-[98px] text-xs text-black">2025-07-12</div>
+      <div
+        className={`relative group w-[28vw] h-auto rounded-lg transition-all duration-300 
+      ${stampsToShow && Object.keys(stampsToShow).length === 10 ? 'ring-20 ring-yellow-400 ring-offset-2 sparkle' : ''}`}>
+        <Image
+          src={design}
+          alt="Stamp Card Design"
+          className="object-cover rounded-lg"
+        />
+        {/* stamps 1–5 */}
+        { stampsToShow ? 
+        <div className="absolute left-[2vw] w-[24vw] bottom-[12vw] flex flex-row gap-[1.26vw]">
+          {Object.entries(stampsToShow).slice(0, 5).map((stamp, index) => (
+            <p
+              key={index}
+              className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded min-h-[2.4vw] max-h-[4.2vw] flex items-center justify-center leading-tight break-words whitespace-normal overflow-hidden"
+            >
+              {stamp[1] ? `${stamp[0]}, ${String(stamp[1]).substring(5)}` : ""}
+            </p>
+          ))}
+        </div>
+        : null}
+
+
+        {/* stamps 6–10 */}
+        { stampsToShow ?
+        <div className="absolute left-[2vw] w-[24vw] bottom-[7vw] flex flex-row gap-[1.26vw]">
+          {Object.entries(stampsToShow).slice(5, 10).map((stamp,index) => (
+            <p
+              key={index}
+              className="text-black italic text-[.9vw] w-[3.8vw] text-center font-bold rounded min-h-[2.4vw] max-h-[4.2vw] flex items-center justify-center leading-tight break-words whitespace-normal overflow-hidden"
+            >
+              {stamp[1] ? `${stamp[0]}, ${String(stamp[1]).substring(5)}` : ""}
+            </p>
+          ))}
+        </div>
+         :
+        null}
+        {/* Hover Overlay */}
+        <div
+          className={`
+            absolute inset-0 bg-black/70 flex items-center justify-center rounded-lg text-white font-semibold text-[1.1vw]
+            transition-opacity duration-300
+            ${showOverlay ? "opacity-100" : "opacity-0"}
+            md:opacity-0 md:group-hover:opacity-100
+          `}
+          onClick={() => {
+            // toggle overlay on mobile; if overlay closing also reset add state
+            setShowOverlay(!showOverlay);
+          }} // toggle on mobile
+        >
+            <button
+              type='submit'
+              className={`btn transform transition-all duration-300
+              ${showOverlay ? "scale-105 opacity-100" : "scale-95 opacity-90"}
+              md:group-hover:scale-105 md:group-hover:opacity-100 border-[0.5vw] rounded-lg p-[0.2vw] bg-yellow-300 text-black border-yellow-300 cursor-pointer`}
+              onClick={(ev) => {ev.stopPropagation();}}
+            >
+              {Object.entries(stampsToShow).length === 10 ? "Redeem your reward!" : "Add a Stamp"}
+            </button>
         </div>
       </div>
-    )}
-  );
-
-  return (
-    <div className={`relative flex items-center bg-${color} shadow-lg w-[344px] h-[580px] border-1 border-b-6 border-r-4 border-black flex flex-col items-center`}>
-        <h2 className="absolute right-[15px] top-[15px] text-black">&#10006;</h2>
-        <div className="flex flex-col gap-[25px] mt-[46px]">{stamps}</div>
-        { claim ? 
-        <div className="bg-lightyellow w-[166px] h-[37px] flex justify-center items-center text-black font-montserrat text-lg font-semibold border-1 border-b-4 border-r-2 mt-[25px]">
-          CLAIM PRIZE
-        </div>
-        :
-        <div className="bg-[#FBCA29] w-[166px] h-[37px] flex justify-center items-center text-black font-montserrat text-lg font-semibold border-1 border-b-4 border-r-2 mt-[25px]">
-          ADD STAMP
-        </div>
-        }
-
-    </div>
-  );
+    );
+  }
+  else {
+    return (
+  <div 
+  className={`relative group w-[28vw] h-auto rounded-lg transition-all duration-300`}>
+        <h1 className='text-[2.3vw] text-black text-center mb-[3vh]'> It looks like you don't have a stampcard yet. Want to add one? </h1>
+          <button 
+            className={`relative text-black cursor-pointer rounded-lg transition-opacity duration-300 focus:outline-2 items-center active:shadow-lg active:shadow-black focus:outline-offset-2 active:bg-gray-500 text-[20vh] ${HOVER_STYLE}`}
+            onClick={() => handleClick(0)}
+            >
+            <p className='absolute inset-0 flex justify-center items-center text-center text-[clamp(1rem,10vw,4rem)] font-bold z-10'>+</p>
+            <Image
+              src={template}
+              alt="Stamp Card Template"
+              className="object-cover rounded-lg transition-shadow "
+              />
+          </button>
+      </div>
+    )
+  }
 }
 
 export function HowItWorks() {

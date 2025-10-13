@@ -4,7 +4,7 @@ import page_image from '@/components/images/landing_page_section.png';
 import logo from '@/components/root/fusion_logo.png';
 import ModalSelector from "@/components/root/ModalSelector";
 import RewardBox from '@/components/root/reward_box.png';
-import { StampProto, HowItWorks } from "@/components/root/Section2";
+import { StampProto, HowItWorks, StampCardProto } from "@/components/root/Section2";
 import { getUpcomingStudySession } from "@/constants";
 import Stampcard from "@/components/Stampcard";
 import TitleTextbox from "@/components/TitleTextbox";
@@ -97,10 +97,10 @@ export default function Home() {
               />
             </div>
             <div className="absolute left-[11vw] top-[11vh] z-3">
-              <Stampcard stamps={stamps1}/>
+              <StampCardProto stamps={stamps1}/>
             </div>
             <div className="absolute left-[3vw] top-[36vh] z-1">
-              <Stampcard stamps={stamps2}/>
+              <StampCardProto stamps={stamps2}/>
             </div>
             <div
               className="
