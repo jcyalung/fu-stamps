@@ -59,7 +59,7 @@ export default function LoginPage() {
         <div className="absolute top-[17.72vh] left-1/2 z-0">
           <div className="flex flex-col items-center">
             <Image
-              src="/title-xl.png"
+              src="/title-XL.png"
               alt="FU Stamps Title"
               width={731}
               height={50}
