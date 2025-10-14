@@ -29,8 +29,12 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    console.log('handle submit called');
     event.preventDefault();
-    if(loading) return;
+    if(loading) { 
+      console.log("double loading detected, stopping");
+      return; 
+    };
     
     // added user id and verification fields to the payload
     const payload = {

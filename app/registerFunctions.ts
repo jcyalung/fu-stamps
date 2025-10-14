@@ -61,25 +61,24 @@ export async function registerUser(email: string, password: string): Promise<{ s
     */
     // try to sign up user
     const { data, error } = await supabase.auth.signUp({email, password});
-    
     // if unsuccessful, return false
     if (error) {
         return ({ success: false, error: error.message });
     }
 
-    const { data: userData, error: userError } = await supabaseAdmin
+    const { data: user, error: userError } = await supabaseAdmin
                     .from(TABLES.USERS)
                     .insert({
                         auth_id: data.user?.id, 
                         email: email
-                    });
-    if(userError) {
-        return { success: false, error: userError.message};
-    }
+                    })
+                    .select()
+                    .single();
+
+    if(userError) { return { success: false, error: userError.message}; }
     
     const token = crypto.randomBytes(32).toString('hex');
     const result = await sendVerificationEmail(email, token);
-
     if(!result) { return{ success: false, error: 'Verification email was not sent.'}; }
 
     // update verification codes database
@@ -87,12 +86,14 @@ export async function registerUser(email: string, password: string): Promise<{ s
     const { data : verificationData, error: verificationError } = await supabaseAdmin
                     .from(TABLES.VERIFICATION_CODES)
                     .insert({
-                        auth_id: data.user?.id, 
+                        auth_id: user?.auth_id, 
                         code: token, 
-                        expiration: expiration
-                    });
-
+                        expiration
+                    })
+                    .select()
+                    .single();
     console.log(verificationData, verificationError);
+
     // if error occurs during verification updates
     if(verificationError) {
         return { success: false, error: verificationError.message }
