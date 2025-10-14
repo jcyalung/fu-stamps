@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import crypto from 'crypto';  // for generating a random token
 import { validateEmailPassword, registerUser, updateVerificationCodes, sendVerificationEmail } from '@/app/registerFunctions';
 
 
@@ -9,6 +8,7 @@ export async function POST(request: Request) {
         // receive the email and password of the user
         const { email, password } = await request.json();
         
+        console.log(email, password);
         // validate the email and password
         const valid = await validateEmailPassword(email, password);
         if (!valid.success) {

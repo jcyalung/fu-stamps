@@ -66,7 +66,7 @@ export default function LoginPage() {
               className="mb-[25px]"
             />
             <div className="border-1 w-[588px] h-[504px] border-r-4 border-b-6 border-black bg-white/90 flex flex-col items-center justify-center">
-              
+              <h1 className="text-black text-[clamp(1rem,40px,3rem)] mb-[3vh]">LOGIN</h1>
               <form onSubmit={handleSubmit} className="flex flex-col items-center w-full">
 
                 <div className="flex flex-col mb-[48px] w-[280px]">
