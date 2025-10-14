@@ -16,7 +16,6 @@ export default function HeaderSelector() {
         } = await supabase.auth.getSession();
         // no session was found
         if(!session) {
-            console.log(sessionError);
             setVerification(0);
             return;
         }
