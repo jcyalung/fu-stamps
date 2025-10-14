@@ -14,7 +14,7 @@ export default function NotFound() {
             <div className="absolute top-[17.72vh] left-1/2 z-0 flex flex-col items-right">
                 <div className="w-[50vw]">
                     <Image
-                      src="/title-xl.png"
+                      src="/title-XL.png"
                       alt="FU Stamps Title"
                       width={731}
                       height={50}
