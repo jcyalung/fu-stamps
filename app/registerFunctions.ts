@@ -92,6 +92,7 @@ export async function registerUser(email: string, password: string): Promise<{ s
                         expiration: expiration
                     });
 
+    console.log(verificationData, verificationError);
     // if error occurs during verification updates
     if(verificationError) {
         return { success: false, error: verificationError.message }
