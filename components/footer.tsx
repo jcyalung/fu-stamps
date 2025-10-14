@@ -47,6 +47,14 @@ export default function Footer() {
                         >
                             LINKTREE
                         </a>
+                        <a
+                          href="https://docs.google.com/forms/d/e/1FAIpQLSdlxsXlu86I18gyohylzfHPB4PGNhx7w7-R4oQceKqXG5M9mA/viewform?usp=header"
+                          className="transition duration-300 ease-in-out hover:text-white"
+                          target="_blank"
+                          rel="noopner noreferrer"
+                        >
+                          REPORT BUG
+                        </a>
                     </div>
                 </div>
 
