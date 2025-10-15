@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { TABLES } from "@/constants";
+import toast from "react-hot-toast";
 const supabase = createClientComponentClient();
 export default function LoginPage() {
   const { push } = useRouter();
@@ -21,7 +22,7 @@ export default function LoginPage() {
       const response = await axios.post("/api/auth/login", payload);
       if (response.status === 200) {
         // alerts the user that login was successful
-        alert("Login successful");
+        toast.success("Login successful");
         const { data: userData } = await supabase
         .from(TABLES.USERS)
         .select('verification')
