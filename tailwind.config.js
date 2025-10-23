@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         verdana: ['Verdana', 'sans-serif'],
+        montserrat: ['var(--font-montserrat)']
       },
     },
   },
